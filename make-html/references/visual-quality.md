@@ -74,6 +74,8 @@ The artifact should look like a useful custom interface, not a generic decorated
 - Use severity labels for findings.
 - Keep long code excerpts collapsible.
 - Highlight only the important lines; do not turn every line into visual noise.
+- Do not let inline-code chip styles leak into block code. Use `:not(pre) > code` for inline code, never a global `code` selector with background, border, padding, or color.
+- Every `pre code` must reset inherited chip styling: transparent background, no border, no extra padding, `color: inherit`, `font: inherit`, and `white-space: inherit`. The visible contrast should come from the `pre` block itself.
 
 ## Tokens And Swatches
 

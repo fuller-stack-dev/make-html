@@ -41,6 +41,7 @@ Check at least one desktop viewport and one narrow viewport around 390px wide.
 - Long paths, URLs, hashes, branch names, package names, and commands should wrap inside their container.
 - Headings should not be clipped or force the viewport wider.
 - Buttons, chips, cards, table cells, and SVG labels should not overlap incoherently.
+- Code blocks must be readable at desktop and narrow widths. Inspect at least one `pre`/`pre code` block when present: text must have clear contrast, inline-code chip backgrounds must not appear behind block-code lines, copy buttons must not cover text, and horizontal scrolling must stay inside the code block.
 - Pills or chips used as labels above headings should have clear spacing below them.
 - Diagrams should fit inside their panel on desktop. If they scroll on narrow screens, the scroll must be bounded to the diagram container and not create page-level overflow.
 - Token swatches should not become oversized empty slabs unless the artifact is explicitly a palette mood board.
@@ -49,11 +50,22 @@ Check at least one desktop viewport and one narrow viewport around 390px wide.
 Useful CSS defaults:
 
 ```css
-code,
 pre,
+:not(pre) > code,
 .long-token {
   overflow-wrap: anywhere;
   word-break: break-word;
+}
+
+pre code {
+  display: block;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  white-space: inherit;
 }
 
 img,

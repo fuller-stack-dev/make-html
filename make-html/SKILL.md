@@ -59,6 +59,7 @@ Use the strongest version of the medium. Do not wrap a Markdown-shaped answer in
 - For decks, use one `<section>` per slide and keyboard navigation.
 - For design references and figure sheets, include copy controls for tokens, SVG, code, or parameters.
 - For code examples, prefer tabbed examples, collapsible detail, annotated snippets, or diff blocks over plain fenced-code styling. Code samples should feel like first-class artifacts.
+- Code blocks must remain readable: style inline code with `:not(pre) > code`, never a bare `code` selector, and reset `pre code` to transparent background, no border, inherited block color, inherited monospace font, and preserved whitespace.
 - For long artifacts, add jump links, tabs, filters, or collapsible sections instead of making the user scroll through a wall.
 
 ## When Plain Chat Is Enough

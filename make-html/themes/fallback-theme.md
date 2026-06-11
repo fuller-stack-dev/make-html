@@ -212,12 +212,46 @@ Tabbed example baseline:
   line-height: 1.65;
 }
 .code-panel.is-active { display: block; }
+
+:not(pre) > code {
+  font-family: var(--mh-mono);
+  font-size: 0.92em;
+  color: var(--mh-slate);
+  background: var(--mh-faint);
+  border: 1px solid var(--mh-line);
+  border-radius: 5px;
+  padding: 0.08em 0.3em;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+pre {
+  background: #121A22;
+  color: #F3F7FB;
+  border: 1px solid rgba(20, 20, 19, 0.18);
+  border-radius: 12px;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+pre code {
+  display: block;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  white-space: inherit;
+}
 ```
 
 Code block rules:
 
 - Horizontal scrolling is acceptable inside `pre`, `.diff`, and dense tables only. It is not acceptable for chip-like controls.
 - Add a small code header with file name, language, or purpose when useful.
+- Style inline code with `:not(pre) > code`; never use a bare `code` selector for chip backgrounds, borders, padding, or color.
+- Always include a `pre code` reset so inline-code styling cannot make code blocks unreadable.
 - Highlight important tokens with plum; keep comments muted.
 - For annotated examples, use a grid with stable line-number and code columns.
 - For diffs, use a dark slate background, muted line numbers, olive additions, rust deletions, and plum for the currently discussed line or annotation.
