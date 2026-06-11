@@ -1,6 +1,6 @@
 # Fallback Theme
 
-Use this only when `source-style.md` cannot find a project, product, brand, app, docs, or design-system style to inherit. This is the default visual language for unbranded `make-html` artifacts.
+Use this only when `source-style.md` cannot find a project, product, brand, app, docs, or design-system style to inherit, and no saved custom theme in `themes/` has been requested or clearly applies. This is the default visual language for unbranded `make-html` artifacts.
 
 The theme should feel like an editorial HTML artifact: paper-like, high contrast, restrained, and built around strong hierarchy, useful examples, and navigable sections. Use a light plum accent instead of orange/clay.
 

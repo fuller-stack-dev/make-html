@@ -2,6 +2,8 @@
 
 When an artifact explains or represents an existing project, product, app, docs site, or brand, inspect that source's styling before designing the page.
 
+Source style has priority over saved custom themes. Use a saved theme only when the user explicitly asks to override source style, or when no usable source style exists.
+
 ## What To Inspect
 
 Look for these files first, using the names that fit the project:

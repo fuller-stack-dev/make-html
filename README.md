@@ -79,6 +79,42 @@ The skill makes three styling decisions in order:
 
 The fallback theme deliberately avoids horizontal scrolling for chip-like controls. Jump links, filter chips, segmented controls, badges, button groups, tag rows, and legends must wrap. Code blocks, diffs, dense tables, and large diagrams may scroll inside bounded containers.
 
+## Custom Themes
+
+Users can save reusable themes inside the installed skill:
+
+```text
+~/.agents/skills/make-html/themes/<theme-name>.md
+```
+
+Start from the bundled template:
+
+```sh
+cp ~/.agents/skills/make-html/themes/theme-template.md ~/.agents/skills/make-html/themes/calm-ops.md
+```
+
+A theme is a plain Markdown file with optional frontmatter:
+
+```markdown
+---
+name: calm-ops
+description: Compact operational dashboard theme for status pages and internal tools.
+tags: dashboard, status, incident, ops
+default: true
+---
+```
+
+When generating an artifact, the skill uses this styling order:
+
+1. Source/project style from the target repo, product, docs, or brand
+2. Explicitly requested saved theme, such as "use the calm-ops theme"
+3. Saved theme with `default: true`, or a clearly matching saved theme
+4. Built-in fallback theme
+
+Custom themes can define tokens, typography, layout density, component rules, code block styling, diagram styling, hover/focus/selected states, and an avoid list. They still inherit the universal `make-html` requirements: self-contained HTML, wrapped chips, real selected state, bounded diagrams, responsive layout, and browser validation.
+
+The repo ignores personal files under `make-html/themes/*.md` except for the bundled template, so local themes are not accidentally committed from a clone.
+
 ## Included References
 
 The installable skill lives in [`make-html/`](make-html/):
@@ -87,11 +123,13 @@ The installable skill lives in [`make-html/`](make-html/):
 - [`references/recognition.md`](make-html/references/recognition.md): when to choose HTML instead of chat or Markdown
 - [`references/artifact-patterns.md`](make-html/references/artifact-patterns.md): common artifact families and structures
 - [`references/example-layout-catalog.md`](make-html/references/example-layout-catalog.md): page-by-page recipes for the 20 HTML-effectiveness examples
+- [`references/custom-themes.md`](make-html/references/custom-themes.md): how to discover, apply, and save reusable themes
 - [`references/fallback-theme.md`](make-html/references/fallback-theme.md): default visual theme when no source style exists
 - [`references/interaction-patterns.md`](make-html/references/interaction-patterns.md): tabs, filters, editors, exports, and selected-state rules
 - [`references/source-style.md`](make-html/references/source-style.md): how to extract style from an existing project
 - [`references/validation.md`](make-html/references/validation.md): static, browser, interaction, responsive, and screenshot checks
 - [`references/visual-quality.md`](make-html/references/visual-quality.md): typography, layout, diagrams, code blocks, and taste defaults
+- [`themes/theme-template.md`](make-html/themes/theme-template.md): starter file for personal saved themes
 
 ## Example Artifacts
 
@@ -156,6 +194,14 @@ Create a component variant sheet for this Button component. Show size, intent, l
 
 ```text
 Build a one-file HTML prompt tuner. Let me edit the prompt template, switch between sample inputs, preview rendered outputs, and copy the final prompt.
+```
+
+```text
+Use my calm-ops theme and create an incident report artifact from these notes.
+```
+
+```text
+Save the styling from this artifact as a reusable make-html theme called quiet-lab.
 ```
 
 ## Notes For Agents

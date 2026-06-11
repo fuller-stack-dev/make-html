@@ -1,3 +1,5 @@
 .DS_Store
 Thumbs.db
 *.log
+make-html/themes/*.md
+!make-html/themes/theme-template.md

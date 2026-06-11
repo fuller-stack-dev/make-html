@@ -25,6 +25,7 @@ Use the strongest version of the medium. Do not wrap a Markdown-shaped answer in
    - `references/visual-quality.md` before writing the final artifact structure and styling.
    - `references/validation.md` before returning any nontrivial artifact, especially artifacts with JavaScript, SVG, tables, diagrams, or dense responsive layouts.
    - `references/source-style.md` when the artifact is about an existing product, repository, brand, app, docs site, or design system.
+   - `references/custom-themes.md` when the user asks for a saved/custom/personal theme, when a theme name is provided, or when no source style exists and `themes/` contains a default or clearly matching theme.
    - `references/fallback-theme.md` when no source/project style can be found after a quick style search, or when the artifact has no natural brand.
    - `references/example-layout-catalog.md` when the task resembles one of the HTML-effectiveness example pages, or when choosing a specific style, layout, or interaction recipe.
    - Read multiple references when the artifact spans categories, such as a plan with mockups and a flowchart.
@@ -47,6 +48,7 @@ Use the strongest version of the medium. Do not wrap a Markdown-shaped answer in
 - Force long tokens to wrap where they appear in prose, callouts, badges, cells, and inline code. Local paths, URLs, branch names, hashes, commands, and long identifiers must not widen the whole page.
 - Do not size text with viewport units. Use explicit sizes plus media-query breakpoints so headings and labels fit predictably.
 - Use clear hierarchy and dense, scannable layout. Avoid filling the page with decorative shells that do not add meaning.
+- Styling precedence is: source/project style, explicitly requested saved theme, saved default or clearly matching theme, then fallback theme.
 - Make state visible. Selected tabs, active filters, changed values, warnings, and recommendations should be obvious at a glance.
 - Selection state must be real. Tabs, chips, filters, segmented controls, nav pills, selected cards, and toggles must update their visual state and `aria-selected`, `aria-pressed`, or `aria-current` value when the user changes selection. Do not hard-code the first item as active unless it is the only possible state.
 - Make interactive controls discoverable and reversible. Sliders, toggles, filters, and editors should have labels and reset behavior when helpful.
