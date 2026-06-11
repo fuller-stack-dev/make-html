@@ -153,25 +153,6 @@ The showcase uses generic Project Atlas data to exercise the broad artifact surf
 - Slide deck with previous/next arrow buttons, left/right keyboard navigation, synced progress, and motion tuning controls
 - Mobile behavior without page-level horizontal overflow
 
-### Fallback theme test
-
-The fallback-theme test artifact focuses on the default visual language:
-
-- [`examples/fallback-theme-test.html`](examples/fallback-theme-test.html)
-- [`examples/images/fallback-theme-preview.png`](examples/images/fallback-theme-preview.png)
-- [`examples/images/fallback-theme-mobile-preview.png`](examples/images/fallback-theme-mobile-preview.png)
-
-It demonstrates:
-
-- Wrapped nav, chip rows, and tab bars
-- Real selected states using `aria-current`, `aria-pressed`, and `aria-selected`
-- Tabbed code examples
-- Collapsible details
-- Diff blocks
-- Copy buttons
-- A routed SVG diagram
-- Mobile behavior without page-level horizontal overflow
-
 ## Prompt Examples
 
 Use these prompts directly with an agent that has the skill installed:
