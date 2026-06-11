@@ -69,6 +69,7 @@ Cards:
 
 - Use flat paper surfaces, thin borders, and dense content. Do not nest cards inside cards.
 - Use small top labels and compact metadata rows to improve scan speed.
+- If a card has an arrow, trailing action, or hover affordance, it must go somewhere useful: a real page, an in-page anchor, a detail panel, or an exported action. Do not make decorative dead cards.
 - When cards are clickable or selectable, add a tasteful hover/focus affordance: a 2-4px lift, slightly stronger border, stronger but still soft shadow, subtle thumbnail/header-band tint shift, and a small movement on the arrow or trailing action.
 - Mirror hover styles with `:focus-visible` for keyboard users and keep the focus ring visible.
 - Do not reveal essential information only on hover. Hover should confirm affordance and focus, not hide content from touch or keyboard users.
@@ -132,6 +133,34 @@ Diagrams:
 
 - Use the same tokens in SVG: slate ink, oat lanes, paper nodes, plum highlights, olive/rust semantic states.
 - Keep diagrams lane-based or layered with routed arrows. Do not accept crossing arrows in the fallback theme.
+- Diagrams must fit inside their panel at the target desktop width. Use `viewBox`, `max-width: 100%`, and enough internal SVG padding so active/hovered nodes, arrowheads, and labels do not clip against the border.
+- If a diagram is intentionally wider than the viewport, put it in a clearly bounded scroll container. Do not let it overflow the card or the page.
+
+Token swatches:
+
+- Prefer compact square swatches next to token name/value for design references.
+- Use large color slabs only when comparing broad palette proportions or visual mood.
+
+```css
+.token-swatch {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.token-swatch i {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  border: 1px solid var(--mh-line);
+  border-radius: 8px;
+  background: var(--token-color);
+}
+```
+
+Label chips:
+
+- Chips or pills used as labels above a title need breathing room. Put them in a stacked layout with `gap` or add bottom margin before the heading.
+- Check at narrow widths that label chips do not touch, overlap, or visually merge with the following heading.
 
 ## Code Examples
 

@@ -72,12 +72,15 @@ Make the export button label specific: "Copy as Markdown", "Copy changed JSON", 
 - Keep visible state and exported state derived from the same data object.
 - Show a small "copied" confirmation after copy actions.
 - For drag-and-drop, support click-based movement too when simple to add.
+- Kanban/triage boards should support actual drag-and-drop between lanes when the page presents draggable cards. Also provide click buttons or keyboard-accessible fallback movement for users who cannot drag.
+- During drag, show the dragged card state and the active drop lane. After drop, update lane counts, estimates, selected state, and export output from the same data object.
 - Add keyboard shortcuts for repetitive classification or review tasks.
 - Add undo/redo for editors with many small state changes when practical.
 - Show validation errors, dependency warnings, counts, and changed-state indicators immediately.
 - Persist state in the page when the environment supports it and the task is long enough that refresh loss would be painful.
 - For sliders and toggles, update the preview live.
 - For tabs and filters, make the active state visually obvious.
+- For slide decks, provide visible previous/next arrow buttons and left/right keyboard navigation. Both paths must update the active slide, any numbered tab state, and the progress label from one shared slide index.
 
 ## Common Editor Mistakes
 

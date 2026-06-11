@@ -27,6 +27,9 @@ For interactive artifacts, exercise at least one meaningful interaction:
 - confirm the relevant `aria-selected`, `aria-pressed`, `aria-current`, checked state, or selected class changes with the visual state
 - confirm the detail panel, preview, counts, or export output updates
 - when cards are primary navigation or selectable items, hover or focus one card and confirm the affordance is visible without layout shift
+- when cards have arrows or look clickable, click one and confirm it navigates, updates a detail panel, copies/exports, or otherwise does real work
+- for Kanban/triage boards, drag a card to another lane and confirm lane counts, estimate totals, selected state, and export text update. Also test the click-based movement fallback if present.
+- for slide decks, click next/previous arrow buttons and press left/right arrow keys. Confirm the active slide, numbered tab `aria-selected`, and progress label stay in sync.
 
 ## Responsive Checks
 
@@ -38,6 +41,9 @@ Check at least one desktop viewport and one narrow viewport around 390px wide.
 - Long paths, URLs, hashes, branch names, package names, and commands should wrap inside their container.
 - Headings should not be clipped or force the viewport wider.
 - Buttons, chips, cards, table cells, and SVG labels should not overlap incoherently.
+- Pills or chips used as labels above headings should have clear spacing below them.
+- Diagrams should fit inside their panel on desktop. If they scroll on narrow screens, the scroll must be bounded to the diagram container and not create page-level overflow.
+- Token swatches should not become oversized empty slabs unless the artifact is explicitly a palette mood board.
 - Avoid viewport-unit font sizing. Use explicit font sizes with media-query breakpoints.
 
 Useful CSS defaults:
@@ -72,6 +78,11 @@ Look for:
 - arrows crossing through unrelated nodes or each other in a way that makes direction unclear
 - missing active states
 - missing hover/focus affordance on clickable cards, rows, or diagram nodes
+- clickable-looking cards that do not link or update anything
+- SVG diagrams clipped by their panel or spilling outside their visible border
+- label chips touching headings
+- token swatches that waste space or obscure the token/value relationship
+- Kanban tickets with oversized centered titles, missing type/owner/estimate metadata, or no visible drag/drop affordance
 - controls detached from the content they affect
 
 If the screenshot reveals a layout defect, patch the artifact and rerun the relevant check.

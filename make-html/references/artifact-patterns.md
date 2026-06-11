@@ -164,12 +164,15 @@ Use for meeting-ready narratives and presentations.
 Recommended structure:
 
 - One `<section>` per slide.
-- Keyboard navigation.
+- Visible previous/next arrow buttons.
+- Keyboard left/right navigation wired to the same state as the arrow buttons.
 - Progress indicator.
 - Full-viewport slide mode with stable aspect ratio.
 - Fullscreen control or keyboard shortcut when possible.
 - Speaker notes hidden behind a toggle when useful.
 - Big idea per slide, not dense prose.
+
+Numbered slide tabs may be included, but they are not a substitute for previous/next navigation. Slide decks should work through arrow buttons, arrow keys, and any direct slide selector without those controls drifting out of sync.
 
 Use HTML when a quick shareable deck is more useful than a full presentation app.
 

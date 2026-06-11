@@ -11,6 +11,7 @@ Use this catalog when a task matches one of the HTML-effectiveness example famil
 - Chip-like controls wrap. Only code panes, diffs, dense tables, and large diagrams may scroll horizontally.
 - Code examples need a designed container: file label, tabs or collapsible detail when useful, line numbers or diff rows when reviewing, and copy buttons when reuse is likely.
 - Clickable cards should feel clickable: use a slight lift, stronger border, soft shadow, thumbnail/header tint change, and small arrow/file-label motion on hover and `:focus-visible`.
+- Clickable cards must link to something real. Use a page URL, an in-page detail panel, an anchored section, or a copy/export action; do not use decorative arrows with dead destinations.
 
 ## Page Recipes
 
@@ -35,6 +36,7 @@ Homepage/card-index variant:
 - Use when presenting a gallery of examples, routes, demos, choices, or generated artifacts.
 - Render each item as an anchor card with a media/thumb band, serif title, short description, filename/action row, and trailing arrow.
 - Hover/focus should promote the card with lift, darker border, warmer/tinted thumb band, stronger shadow, and arrow movement. Neighboring cards remain quiet.
+- The card destination should be visible and testable: navigate to a page, update an adjacent detail panel, or scroll to a named in-page target.
 
 ### 03-code-review-pr.html — Code Review: Annotated Pull Request
 
@@ -58,6 +60,7 @@ Use for tokens, source style extraction, and reusable visual references.
 
 - Layout: swatch grids, typography rows, spacing/radius/shadow demonstrations, component examples, copyable tokens.
 - Include: token names and values, actual rendered samples, focus/disabled/error states where relevant.
+- Prefer compact square swatches beside token names/values for token lists; use large color slabs only for palette exploration.
 - Avoid: prose-only design system descriptions.
 
 ### 06-component-variants.html — Design: Component Variants
@@ -88,8 +91,9 @@ Use for low-fidelity interaction checks and screen-to-screen workflows.
 
 Use for meeting-ready narratives, updates, and design/readout decks.
 
-- Layout: one full-viewport `<section>` per slide, progress bar, keyboard navigation, concise slide title, slide-specific visual.
-- Include: left/right navigation, progress state, and notes or appendix only when useful.
+- Layout: one full-viewport `<section>` per slide, progress bar, visible previous/next arrow buttons, keyboard navigation, concise slide title, slide-specific visual.
+- Include: left/right arrow buttons and left/right keyboard shortcuts wired to the same slide state, progress state, and notes or appendix only when useful.
+- Active slide controls must update `aria-selected` and the progress label/count together whether the user clicks a numbered tab, clicks an arrow button, or presses an arrow key.
 - Avoid: dense document pages pretending to be slides.
 
 ### 10-svg-illustrations.html — Diagrams: SVG Figure Sheet
@@ -160,8 +164,10 @@ Use for author-side PR descriptions and reviewer prep.
 
 Use when the user must sort, prioritize, classify, or sequence many items.
 
-- Layout: toolbar filters, Kanban lanes, draggable/clickable tickets, counts, summary/export panel.
-- Include: copy Markdown/JSON export, visible selected/filter state, drag and click-based movement where feasible.
+- Layout: sticky toolbar with lane counts and export/reset actions, Kanban lanes, compact draggable/clickable tickets, lane estimate footers, summary/export panel.
+- Include: copy Markdown/JSON export, visible selected/filter state, drag-and-drop movement, and click-based movement fallback.
+- Ticket cards should be dense and scannable: small title, issue id, type chip, size/estimate badge, assignee initials/avatar, and hover/focus/drag state.
+- Lanes should have visible names, counts, optional colored top borders, drop-target feedback, and estimate totals.
 - Avoid: a board with no export path back to the agent/workflow.
 
 ### 19-editor-feature-flags.html — Editor: Feature Flag Editor

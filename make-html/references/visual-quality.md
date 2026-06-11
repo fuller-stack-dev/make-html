@@ -30,8 +30,10 @@ The artifact should look like a useful custom interface, not a generic decorated
 ## Layout
 
 - Use CSS grid for comparisons, dashboards, boards, and component sheets.
+- For repeated cards, prefer container-responsive tracks such as `repeat(auto-fit, minmax(min(100%, 300px), 1fr))` and set children to `min-width: 0`. Avoid fixed three-column grids that overflow in side panes or narrow app windows.
 - Use flex for toolbars, chips, metric rows, and compact controls.
 - Set chip, filter, badge, segmented-control, and jump-link rows to `flex-wrap: wrap`. Do not put these controls in horizontal scrolling containers.
+- Label chips above titles need bottom padding or a column gap. A pill touching a heading reads as broken layout.
 - Use sticky sidebars or top nav only when they improve navigation.
 - Let dense tables scroll horizontally on small screens if needed.
 - Let large diagrams scroll or scale only when wrapping would destroy the diagram. Explain that the diagram is intentionally scrollable when it is.
@@ -49,6 +51,8 @@ The artifact should look like a useful custom interface, not a generic decorated
 
 - Use inline SVG for flowcharts, architecture maps, timelines, rings, dependency graphs, and annotated figures.
 - Use `viewBox`, not fixed-only SVG sizing.
+- The rendered SVG must fit inside its panel on the target desktop viewport. Add internal SVG margin and avoid placing nodes directly against the viewBox edge.
+- Set SVGs to `max-width: 100%`. Use a bounded scroll wrapper only when scale would make labels unreadable.
 - Use grouped elements and readable IDs/classes for editable SVG.
 - Use round coordinates where possible.
 - Use `currentColor` for ink when the diagram should adapt to theme.
@@ -70,6 +74,20 @@ The artifact should look like a useful custom interface, not a generic decorated
 - Use severity labels for findings.
 - Keep long code excerpts collapsible.
 - Highlight only the important lines; do not turn every line into visual noise.
+
+## Tokens And Swatches
+
+- For token references, default to a compact square swatch beside the token name and value.
+- Reserve large swatch slabs for palette mood boards, not ordinary design-token lists.
+- Long token names and values must wrap inside the row instead of widening the page.
+
+## Boards And Tickets
+
+- Kanban boards should be information-dense, not card-heavy dashboards. Use compact ticket cards with small titles and useful metadata.
+- Ticket cards should usually show id, type/status chip, owner/assignee, size or estimate, and a short title.
+- Lane headers should show lane name and count. Lane footers can show estimate totals when planning or triage is the task.
+- Drag/drop boards need visible drag state and lane drop feedback. Keep click-based movement as a fallback when practical.
+- Avoid oversized centered ticket titles; they reduce scan speed and make the board feel like a demo rather than a workflow.
 
 ## Responsive Behavior
 
