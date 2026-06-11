@@ -57,7 +57,7 @@ Navigation and chips:
 
 - Use pill links/buttons with paper background, slate text, oat border, and plum active/focus state.
 - Rows of chips, filters, badges, legends, and segmented controls must wrap.
-- Active chips can invert to slate text on paper or paper text on slate; add a plum underline, dot, or border so the state is not only dark fill.
+- Active chips can invert to slate text on paper or paper text on slate; use a plum border, background tint, or small dot so the state is not only dark fill. Do not use drop shadows or inset `box-shadow` underlines for selected or focused nav, tab, chip, or segmented-control states.
 - Active styling must be state-driven: use selectors such as `[aria-current="true"]`, `[aria-pressed="true"]`, `[aria-selected="true"]`, or `.is-active` that JavaScript updates. Do not use `:first-child` as a fake selected state.
 
 Callouts:
@@ -70,8 +70,8 @@ Cards:
 - Use flat paper surfaces, thin borders, and dense content. Do not nest cards inside cards.
 - Use small top labels and compact metadata rows to improve scan speed.
 - If a card has an arrow, trailing action, or hover affordance, it must go somewhere useful: a real page, an in-page anchor, a detail panel, or an exported action. Do not make decorative dead cards.
-- When cards are clickable or selectable, add a tasteful hover/focus affordance: a 2-4px lift, slightly stronger border, stronger but still soft shadow, subtle thumbnail/header-band tint shift, and a small movement on the arrow or trailing action.
-- Mirror hover styles with `:focus-visible` for keyboard users and keep the focus ring visible.
+- When cards are clickable or selectable, add a tasteful hover affordance: a 2-4px lift, slightly stronger border, optional soft hover shadow, subtle thumbnail/header-band tint shift, and a small movement on the arrow or trailing action.
+- Use an explicit `:focus-visible` outline or border for keyboard users. Do not use drop shadows as the focus indicator.
 - Do not reveal essential information only on hover. Hover should confirm affordance and focus, not hide content from touch or keyboard users.
 
 Interactive card baseline:
@@ -85,14 +85,19 @@ Interactive card baseline:
   color: inherit;
   text-decoration: none;
   overflow: hidden;
-  transition: transform 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+  transition: transform 150ms ease, border-color 150ms ease, box-shadow 150ms ease, outline-color 150ms ease;
 }
-.artifact-card:hover,
-.artifact-card:focus-visible {
+.artifact-card:hover {
   transform: translateY(-3px);
   border-color: var(--mh-slate);
   box-shadow: 0 14px 34px rgba(20, 20, 19, 0.12);
   outline: none;
+}
+.artifact-card:focus-visible {
+  transform: translateY(-3px);
+  border-color: var(--mh-plum);
+  outline: 2px solid var(--mh-plum);
+  outline-offset: 3px;
 }
 .artifact-card .thumb {
   background: var(--mh-faint);
@@ -200,7 +205,7 @@ Tabbed example baseline:
 .tabbar button.is-active {
   background: var(--mh-paper);
   color: var(--mh-slate);
-  box-shadow: inset 0 -3px 0 var(--mh-plum);
+  border-bottom: 3px solid var(--mh-plum);
 }
 .code-panel {
   display: none;
