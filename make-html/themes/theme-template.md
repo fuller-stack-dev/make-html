@@ -43,7 +43,7 @@ default: false
 - Navigation/chips:
 - Cards:
 - Tables:
-- Code examples: include `:not(pre) > code` for inline code and a `pre code` reset with transparent background, no border, inherited color/font, and preserved whitespace.
+- Code examples: include `:not(pre) > code` for inline code, a `pre code` reset with transparent background, no border, inherited color/font, preserved whitespace, and syntax highlighting token styles for substantial blocks.
 - Diagrams:
 - Forms/editors:
 

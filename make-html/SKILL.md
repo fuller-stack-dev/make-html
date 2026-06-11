@@ -64,6 +64,7 @@ Use the strongest version of the medium. Do not wrap a Markdown-shaped answer in
 - For design references and figure sheets, include copy controls for tokens, SVG, code, or parameters.
 - For code examples, prefer tabbed examples, collapsible detail, annotated snippets, or diff blocks over plain fenced-code styling. Code samples should feel like first-class artifacts.
 - Code blocks must remain readable: style inline code with `:not(pre) > code`, never a bare `code` selector, and reset `pre code` to transparent background, no border, inherited block color, inherited monospace font, and preserved whitespace.
+- Code blocks should include offline syntax highlighting by default. Use semantic token spans or a small inline highlighter for common languages such as JSON, shell, HTML, CSS, JavaScript, TypeScript, and diffs. Do not depend on CDN highlighters or leave substantial code blocks monochrome.
 - For long artifacts, add jump links, tabs, filters, or collapsible sections instead of making the user scroll through a wall.
 
 ## When Plain Chat Is Enough

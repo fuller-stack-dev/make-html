@@ -244,6 +244,18 @@ pre code {
   font: inherit;
   white-space: inherit;
 }
+
+.tok-key { color: #A678D6; }
+.tok-str { color: #5F7F3F; }
+.tok-num,
+.tok-lit { color: #9A6B19; }
+.tok-comment { color: #8B8980; }
+.tok-prop { color: #7B55B6; }
+.tok-punc { color: #D8D4C8; }
+.tok-tag { color: #7B55B6; }
+.tok-attr { color: #788C5D; }
+.tok-add { color: #5F7F3F; }
+.tok-del { color: #A84F3D; }
 ```
 
 Code block rules:
@@ -252,6 +264,7 @@ Code block rules:
 - Add a small code header with file name, language, or purpose when useful.
 - Style inline code with `:not(pre) > code`; never use a bare `code` selector for chip backgrounds, borders, padding, or color.
 - Always include a `pre code` reset so inline-code styling cannot make code blocks unreadable.
+- Add syntax highlighting for substantial code blocks using inline semantic spans or a small offline highlighter. At minimum distinguish keys/properties, strings, keywords, literals/numbers, comments, punctuation, and diff additions/deletions when those token types are present.
 - Highlight important tokens with plum; keep comments muted.
 - For annotated examples, use a grid with stable line-number and code columns.
 - For diffs, use a dark slate background, muted line numbers, olive additions, rust deletions, and plum for the currently discussed line or annotation.

@@ -44,6 +44,7 @@ Check at least one desktop viewport and one narrow viewport around 390px wide.
 - Headings should not be clipped or force the viewport wider.
 - Buttons, chips, cards, table cells, and SVG labels should not overlap incoherently.
 - Code blocks must be readable at desktop and narrow widths. Inspect at least one `pre`/`pre code` block when present: text must have clear contrast, inline-code chip backgrounds must not appear behind block-code lines, copy buttons must not cover text, and horizontal scrolling must stay inside the code block.
+- Substantial code blocks should have syntax highlighting. Confirm at least one token class or equivalent inline token styling exists inside each reusable JSON, HTML, CSS, JavaScript, TypeScript, shell, or diff block. Plain monochrome blocks are acceptable only for tiny one-line snippets or raw terminal output where highlighting would add no signal.
 - Pills or chips used as labels above headings should have clear spacing below them.
 - Diagrams should fit inside their panel on desktop. If they scroll on narrow screens, the scroll must be bounded to the diagram container and not create page-level overflow.
 - Token swatches should not become oversized empty slabs unless the artifact is explicitly a palette mood board.
@@ -69,6 +70,16 @@ pre code {
   font: inherit;
   white-space: inherit;
 }
+
+.tok-key { color: #93c5fd; }
+.tok-str { color: #86efac; }
+.tok-num,
+.tok-lit { color: #fbbf24; }
+.tok-comment { color: #94a3b8; }
+.tok-prop { color: #c4b5fd; }
+.tok-punc { color: #cbd5e1; }
+.tok-add { color: #86efac; }
+.tok-del { color: #fca5a5; }
 
 img,
 svg,

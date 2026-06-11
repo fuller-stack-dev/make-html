@@ -76,6 +76,9 @@ The artifact should look like a useful custom interface, not a generic decorated
 - Highlight only the important lines; do not turn every line into visual noise.
 - Do not let inline-code chip styles leak into block code. Use `:not(pre) > code` for inline code, never a global `code` selector with background, border, padding, or color.
 - Every `pre code` must reset inherited chip styling: transparent background, no border, no extra padding, `color: inherit`, `font: inherit`, and `white-space: inherit`. The visible contrast should come from the `pre` block itself.
+- Add syntax highlighting to substantial code blocks. Prefer stable semantic spans such as `.tok-key`, `.tok-str`, `.tok-num`, `.tok-lit`, `.tok-comment`, `.tok-prop`, `.tok-punc`, `.tok-tag`, `.tok-attr`, `.tok-add`, and `.tok-del`, or a small inline highlighter that creates those spans at load time.
+- Keep highlighting tasteful and readable: strings, keys/properties, keywords, comments, literals, numbers, punctuation, tags/attributes, and diff additions/deletions should be distinguishable without turning every token into a different color.
+- If you use a runtime highlighter, escape source text before insertion and keep token passes from rewriting generated `<span>` markup or HTML entities.
 
 ## Tokens And Swatches
 
