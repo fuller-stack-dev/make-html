@@ -132,6 +132,8 @@ When style will be reused, create or update a design reference artifact: swatche
 
 If no source style exists after a quick search, use `themes/fallback-theme.md` instead of inventing a generic gray dashboard. The fallback theme is a paper/editorial style with a light plum accent, wrapped navigation, strong code examples, and restrained card styling.
 
+If the artifact is about an existing project or product, the style choice must be auditable. Either use concrete source tokens and name the files/tokens, use a named saved theme, or use `themes/fallback-theme.md`. Do not ship an unlabeled neutral light UI as a compromise.
+
 ## Taste Defaults
 
 - Prefer calm, precise, content-led design.

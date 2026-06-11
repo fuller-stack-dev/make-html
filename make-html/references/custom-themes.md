@@ -20,6 +20,8 @@ Ignore `themes/theme-template.md` and `themes/fallback-theme.md` when selecting 
 4. If no default exists, choose a theme whose `tags` or description clearly match the task.
 5. If no saved theme clearly applies, use `themes/fallback-theme.md`.
 
+Never create an unnamed theme between these steps. If source style is not backed by concrete evidence and no saved theme applies, the fallback theme is mandatory.
+
 Do not ask the user to choose a theme unless several saved themes are equally plausible and the style choice matters.
 
 ## Theme File Format
@@ -89,6 +91,7 @@ Optional content:
 - Preserve universal `make-html` rules: wrapped chips, real selected states, bounded diagram overflow, responsive layout, accessible controls, and browser validation.
 - If a theme conflicts with source/project style, prefer source/project style unless the user explicitly asks to override it.
 - If a theme omits a component pattern needed by the artifact, combine the theme tokens with the corresponding `make-html` reference pattern.
+- Include a compact style provenance note naming the theme file used.
 
 ## Saving A New Theme
 

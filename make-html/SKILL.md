@@ -29,11 +29,12 @@ Use the strongest version of the medium. Do not wrap a Markdown-shaped answer in
    - `themes/fallback-theme.md` when no source/project style can be found after a quick style search, or when the artifact has no natural brand.
    - `references/example-layout-catalog.md` when the task resembles one of the HTML-effectiveness example pages, or when choosing a specific style, layout, or interaction recipe.
    - Read multiple references when the artifact spans categories, such as a plan with mockups and a flowchart.
-3. Choose a page structure that makes the shape of the information obvious. Prefer side-by-side layouts, timelines, maps, tables, diagrams, controls, and navigation over long linear prose.
-4. Write a complete HTML5 document with inline CSS and, when useful, inline JavaScript.
-5. For editor-style artifacts, include a visible export path such as copy as Markdown, copy as JSON, copy diff, copy prompt, or download file.
-6. Include enough source excerpts, labels, and assumptions inside the page for the artifact to stand alone.
-7. Validate the artifact before returning it. At minimum, check self-containment, required HTML tags, dynamic render output when JavaScript is present, and narrow-viewport behavior.
+3. Resolve style provenance before writing CSS: source-backed style with concrete files/tokens, an explicitly selected saved theme, or the built-in fallback theme. Do not invent an unlabeled generic theme between these choices.
+4. Choose a page structure that makes the shape of the information obvious. Prefer side-by-side layouts, timelines, maps, tables, diagrams, controls, and navigation over long linear prose.
+5. Write a complete HTML5 document with inline CSS and, when useful, inline JavaScript.
+6. For editor-style artifacts, include a visible export path such as copy as Markdown, copy as JSON, copy diff, copy prompt, or download file.
+7. Include enough source excerpts, labels, assumptions, and style provenance inside the page for the artifact to stand alone.
+8. Validate the artifact before returning it. At minimum, check self-containment, required HTML tags, dynamic render output when JavaScript is present, and narrow-viewport behavior.
 
 ## Universal Requirements
 
@@ -49,6 +50,9 @@ Use the strongest version of the medium. Do not wrap a Markdown-shaped answer in
 - Do not size text with viewport units. Use explicit sizes plus media-query breakpoints so headings and labels fit predictably.
 - Use clear hierarchy and dense, scannable layout. Avoid filling the page with decorative shells that do not add meaning.
 - Styling precedence is: source/project style, explicitly requested saved theme, saved default or clearly matching theme, then fallback theme.
+- When claiming source/project style, the artifact must be backed by concrete style evidence such as CSS variables, theme config, UI component source, local screenshots, or product pages. Source content alone is not source style.
+- When no source style evidence is found, use `themes/fallback-theme.md` directly. Do not create a neutral light dashboard, generic docs UI, or model-invented palette as a substitute fallback.
+- Add a compact style provenance note in the artifact, usually in the footer or a source/evidence section: name the source files/tokens, saved theme, or fallback theme used.
 - Make state visible. Selected tabs, active filters, changed values, warnings, and recommendations should be obvious at a glance.
 - Selection state must be real. Tabs, chips, filters, segmented controls, nav pills, selected cards, and toggles must update their visual state and `aria-selected`, `aria-pressed`, or `aria-current` value when the user changes selection. Do not hard-code the first item as active unless it is the only possible state.
 - Make interactive controls discoverable and reversible. Sliders, toggles, filters, and editors should have labels and reset behavior when helpful.

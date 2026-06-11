@@ -9,6 +9,8 @@ Validate substantial HTML artifacts before returning them. The goal is to catch 
 - Scan for accidental external dependencies: `<script src>`, stylesheet `<link>`, `@import`, CDN URLs, remote fonts, and network-only assets.
 - If the artifact should be offline, treat external dependencies as defects.
 - Check that source references, assumptions, counts, and labels needed to understand the artifact are visible in the page.
+- For artifacts about an existing project, product, app, docs site, or brand, confirm there is a style provenance note naming the inspected source style files/tokens, the saved theme file, or `themes/fallback-theme.md`.
+- If source/project style is claimed, confirm the CSS visibly uses extracted source tokens. If no style evidence was found, confirm the artifact uses the actual fallback theme instead of a generic invented palette.
 
 ## Render Checks
 
