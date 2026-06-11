@@ -113,7 +113,7 @@ When generating an artifact, the skill uses this styling order:
 
 Custom themes can define tokens, typography, layout density, component rules, code block styling, diagram styling, hover/focus/selected states, and an avoid list. They still inherit the universal `make-html` requirements: self-contained HTML, wrapped chips, real selected state, bounded diagrams, responsive layout, and browser validation.
 
-The repo ignores personal files under `make-html/themes/*.md` except for the bundled template, so local themes are not accidentally committed from a clone.
+The repo ignores personal files under `make-html/themes/*.md` except for the bundled template and built-in fallback theme, so local themes are not accidentally committed from a clone.
 
 ## Included References
 
@@ -124,11 +124,11 @@ The installable skill lives in [`make-html/`](make-html/):
 - [`references/artifact-patterns.md`](make-html/references/artifact-patterns.md): common artifact families and structures
 - [`references/example-layout-catalog.md`](make-html/references/example-layout-catalog.md): page-by-page recipes for the 20 HTML-effectiveness examples
 - [`references/custom-themes.md`](make-html/references/custom-themes.md): how to discover, apply, and save reusable themes
-- [`references/fallback-theme.md`](make-html/references/fallback-theme.md): default visual theme when no source style exists
 - [`references/interaction-patterns.md`](make-html/references/interaction-patterns.md): tabs, filters, editors, exports, and selected-state rules
 - [`references/source-style.md`](make-html/references/source-style.md): how to extract style from an existing project
 - [`references/validation.md`](make-html/references/validation.md): static, browser, interaction, responsive, and screenshot checks
 - [`references/visual-quality.md`](make-html/references/visual-quality.md): typography, layout, diagrams, code blocks, and taste defaults
+- [`themes/fallback-theme.md`](make-html/themes/fallback-theme.md): built-in fallback theme when no source style exists
 - [`themes/theme-template.md`](make-html/themes/theme-template.md): starter file for personal saved themes
 
 ## Example Artifacts

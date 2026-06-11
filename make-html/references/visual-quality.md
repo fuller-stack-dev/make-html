@@ -128,7 +128,7 @@ Use those tokens directly when the artifact is for that product. Include a small
 
 When style will be reused, create or update a design reference artifact: swatches, type scale, spacing, radius, shadows, components, and motion tokens. Future HTML artifacts can read that reference and reuse its CSS variables.
 
-If no source style exists after a quick search, use `fallback-theme.md` instead of inventing a generic gray dashboard. The fallback theme is a paper/editorial style with a light plum accent, wrapped navigation, strong code examples, and restrained card styling.
+If no source style exists after a quick search, use `themes/fallback-theme.md` instead of inventing a generic gray dashboard. The fallback theme is a paper/editorial style with a light plum accent, wrapped navigation, strong code examples, and restrained card styling.
 
 ## Taste Defaults
 

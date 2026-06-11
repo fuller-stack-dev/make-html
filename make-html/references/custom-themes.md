@@ -10,15 +10,15 @@ themes/*.md
 
 Use this reference when the user asks for a saved, custom, personal, house, or named theme, or when no source/project style exists and a theme in `themes/` is marked as the default.
 
-Ignore `themes/theme-template.md` when selecting a theme. It is only a scaffold for new user themes.
+Ignore `themes/theme-template.md` and `themes/fallback-theme.md` when selecting a saved user theme. The template is only a scaffold, and the fallback theme is the final built-in default.
 
 ## Lookup Order
 
 1. Source style from the target project, product, brand, app, or docs still wins.
 2. If the user names a saved theme, read the matching `themes/<name>.md` file and apply it.
-3. If the user asks for their custom/default theme without naming one, inspect `themes/*.md` except `theme-template.md` and choose the file with `default: true`.
+3. If the user asks for their custom/default theme without naming one, inspect `themes/*.md` except `theme-template.md` and `fallback-theme.md` and choose the file with `default: true`.
 4. If no default exists, choose a theme whose `tags` or description clearly match the task.
-5. If no saved theme clearly applies, use `references/fallback-theme.md`.
+5. If no saved theme clearly applies, use `themes/fallback-theme.md`.
 
 Do not ask the user to choose a theme unless several saved themes are equally plausible and the style choice matters.
 

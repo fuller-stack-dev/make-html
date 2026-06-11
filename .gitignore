@@ -3,3 +3,4 @@ Thumbs.db
 *.log
 make-html/themes/*.md
 !make-html/themes/theme-template.md
+!make-html/themes/fallback-theme.md

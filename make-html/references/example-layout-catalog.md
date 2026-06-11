@@ -1,6 +1,6 @@
 # Example Layout Catalog
 
-Use this catalog when a task matches one of the HTML-effectiveness example families or when the user asks to borrow that site's style, layout, or design language. Combine it with `source-style.md` first; use `fallback-theme.md` only when no source style exists.
+Use this catalog when a task matches one of the HTML-effectiveness example families or when the user asks to borrow that site's style, layout, or design language. Combine it with `source-style.md` first; use `themes/fallback-theme.md` only when no source style exists.
 
 ## Shared Rules
 

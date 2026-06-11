@@ -26,7 +26,7 @@ Use the strongest version of the medium. Do not wrap a Markdown-shaped answer in
    - `references/validation.md` before returning any nontrivial artifact, especially artifacts with JavaScript, SVG, tables, diagrams, or dense responsive layouts.
    - `references/source-style.md` when the artifact is about an existing product, repository, brand, app, docs site, or design system.
    - `references/custom-themes.md` when the user asks for a saved/custom/personal theme, when a theme name is provided, or when no source style exists and `themes/` contains a default or clearly matching theme.
-   - `references/fallback-theme.md` when no source/project style can be found after a quick style search, or when the artifact has no natural brand.
+   - `themes/fallback-theme.md` when no source/project style can be found after a quick style search, or when the artifact has no natural brand.
    - `references/example-layout-catalog.md` when the task resembles one of the HTML-effectiveness example pages, or when choosing a specific style, layout, or interaction recipe.
    - Read multiple references when the artifact spans categories, such as a plan with mockups and a flowchart.
 3. Choose a page structure that makes the shape of the information obvious. Prefer side-by-side layouts, timelines, maps, tables, diagrams, controls, and navigation over long linear prose.
