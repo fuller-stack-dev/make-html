@@ -1,0 +1,955 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>make-html fallback theme test</title>
+  <style>
+    :root {
+      --mh-ivory: #FAF9F5;
+      --mh-paper: #FFFFFF;
+      --mh-slate: #141413;
+      --mh-muted: #67665F;
+      --mh-faint: #F0EEE6;
+      --mh-line: #D8D4C8;
+      --mh-oat: #E3DACC;
+      --mh-olive: #788C5D;
+      --mh-plum: #A678D6;
+      --mh-plum-dark: #7B55B6;
+      --mh-plum-soft: rgba(166, 120, 214, 0.16);
+      --mh-rust: #A84F3D;
+      --mh-serum: #F7F0FF;
+      --mh-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+      --mh-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --mh-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      color-scheme: light;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.56), rgba(250, 249, 245, 0) 360px),
+        var(--mh-ivory);
+      color: var(--mh-slate);
+      font-family: var(--mh-sans);
+      font-size: 16px;
+      line-height: 1.55;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .wrap {
+      width: min(1120px, calc(100% - 48px));
+      margin: 0 auto;
+    }
+
+    .masthead {
+      padding: 72px 0 42px;
+      border-bottom: 1.5px solid var(--mh-line);
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 0 0 18px;
+      color: var(--mh-muted);
+      font-family: var(--mh-mono);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 42px;
+      height: 2px;
+      background: var(--mh-plum);
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      line-height: 1.05;
+      font-family: var(--mh-serif);
+      font-weight: 520;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      max-width: 15ch;
+      font-size: 62px;
+    }
+
+    h1 span {
+      color: var(--mh-plum-dark);
+      font-style: italic;
+    }
+
+    .deck {
+      max-width: 720px;
+      margin: 22px 0 0;
+      color: var(--mh-muted);
+      font-size: 19px;
+    }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 26px;
+    }
+
+    .meta-pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 7px 11px;
+      border: 1.5px solid var(--mh-line);
+      border-radius: 999px;
+      background: var(--mh-paper);
+      color: var(--mh-muted);
+      font-family: var(--mh-mono);
+      font-size: 12px;
+      overflow-wrap: anywhere;
+    }
+
+    .toc-shell {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      background: rgba(250, 249, 245, 0.92);
+      border-bottom: 1.5px solid var(--mh-line);
+      backdrop-filter: blur(16px);
+    }
+
+    .toc {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 14px 0;
+      overflow-x: visible;
+    }
+
+    .toc a,
+    .chip,
+    .copy-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 36px;
+      padding: 8px 13px;
+      border: 1.5px solid var(--mh-line);
+      border-radius: 999px;
+      background: var(--mh-paper);
+      color: var(--mh-slate);
+      text-decoration: none;
+      font-family: var(--mh-mono);
+      font-size: 12px;
+      font-weight: 650;
+      cursor: pointer;
+      transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+    }
+
+    .toc a:hover,
+    .toc a:focus-visible,
+    .chip:hover,
+    .chip:focus-visible,
+    .copy-btn:hover,
+    .copy-btn:focus-visible {
+      border-color: var(--mh-plum);
+      box-shadow: 0 0 0 4px var(--mh-plum-soft);
+      outline: none;
+    }
+
+    .toc a[aria-current="true"],
+    .chip[aria-pressed="true"] {
+      color: var(--mh-paper);
+      border-color: var(--mh-slate);
+      background: var(--mh-slate);
+      box-shadow: inset 0 -3px 0 var(--mh-plum);
+    }
+
+    main {
+      padding: 46px 0 92px;
+    }
+
+    section {
+      scroll-margin-top: 96px;
+      margin-top: 42px;
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(74px, auto) minmax(0, 1fr);
+      gap: 24px;
+      align-items: baseline;
+      margin-bottom: 20px;
+    }
+
+    .index {
+      color: var(--mh-plum-dark);
+      font-family: var(--mh-mono);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .section-title {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: baseline;
+      justify-content: space-between;
+      border-bottom: 1.5px solid var(--mh-line);
+      padding-bottom: 16px;
+    }
+
+    .section-title h2 {
+      font-size: 34px;
+    }
+
+    .section-title p {
+      max-width: 620px;
+      margin: 0;
+      color: var(--mh-muted);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      border: 1.5px solid var(--mh-line);
+      border-radius: 14px;
+      background: var(--mh-paper);
+      padding: 18px;
+      box-shadow: 0 16px 38px rgba(20, 20, 19, 0.05);
+    }
+
+    .card h3 {
+      margin-bottom: 10px;
+      font-size: 22px;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--mh-muted);
+    }
+
+    .token-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .swatch {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      min-height: 34px;
+      padding: 7px 10px;
+      border: 1.5px solid var(--mh-line);
+      border-radius: 999px;
+      background: var(--mh-paper);
+      color: var(--mh-muted);
+      font-family: var(--mh-mono);
+      font-size: 12px;
+      overflow-wrap: anywhere;
+    }
+
+    .swatch i {
+      width: 14px;
+      height: 14px;
+      border: 1px solid rgba(20, 20, 19, 0.16);
+      border-radius: 50%;
+      background: var(--tone);
+      flex: 0 0 auto;
+    }
+
+    .callout {
+      border: 1.5px solid var(--mh-line);
+      border-left: 5px solid var(--mh-plum);
+      border-radius: 12px;
+      background: var(--mh-paper);
+      padding: 18px 20px;
+      color: var(--mh-muted);
+    }
+
+    .callout strong {
+      color: var(--mh-slate);
+      font-family: var(--mh-serif);
+      font-size: 20px;
+      font-weight: 520;
+    }
+
+    .code-tabs,
+    .diff-card,
+    details {
+      border: 1.5px solid var(--mh-line);
+      border-radius: 12px;
+      background: var(--mh-paper);
+      overflow: hidden;
+      box-shadow: 0 18px 44px rgba(20, 20, 19, 0.04);
+    }
+
+    .tabbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: stretch;
+      border-bottom: 1.5px solid var(--mh-line);
+      background: var(--mh-faint);
+      overflow-x: visible;
+    }
+
+    .tabbar button {
+      min-height: 42px;
+      padding: 10px 15px;
+      border: 0;
+      border-right: 1px solid var(--mh-line);
+      background: transparent;
+      color: var(--mh-muted);
+      font-family: var(--mh-mono);
+      font-size: 12px;
+      font-weight: 750;
+      cursor: pointer;
+    }
+
+    .tabbar button.is-active {
+      background: var(--mh-paper);
+      color: var(--mh-slate);
+      box-shadow: inset 0 -3px 0 var(--mh-plum);
+    }
+
+    .code-head,
+    .diff-head {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--mh-line);
+      background: rgba(250, 249, 245, 0.72);
+    }
+
+    .file-label {
+      color: var(--mh-muted);
+      font-family: var(--mh-mono);
+      font-size: 12px;
+      overflow-wrap: anywhere;
+    }
+
+    .copy-btn {
+      min-height: 30px;
+      padding: 6px 10px;
+      color: var(--mh-plum-dark);
+    }
+
+    pre {
+      margin: 0;
+      overflow-x: auto;
+    }
+
+    code {
+      font-family: var(--mh-mono);
+    }
+
+    :not(pre) > code {
+      padding: 2px 5px;
+      border: 1px solid var(--mh-line);
+      border-radius: 5px;
+      background: var(--mh-faint);
+      overflow-wrap: anywhere;
+      font-size: 0.92em;
+    }
+
+    .code-panel {
+      display: none;
+      padding: 16px 18px 18px;
+      color: var(--mh-slate);
+      font-family: var(--mh-mono);
+      font-size: 12.5px;
+      line-height: 1.65;
+      tab-size: 2;
+    }
+
+    .code-panel.is-active {
+      display: block;
+    }
+
+    .comment {
+      color: var(--mh-muted);
+    }
+
+    .mark {
+      color: var(--mh-plum-dark);
+      font-weight: 800;
+    }
+
+    .diff {
+      background: var(--mh-slate);
+      color: #EDEAE0;
+      font-family: var(--mh-mono);
+      font-size: 12.5px;
+      line-height: 1.7;
+      overflow-x: auto;
+    }
+
+    .diff-row {
+      display: grid;
+      grid-template-columns: 48px 18px minmax(520px, 1fr);
+      align-items: baseline;
+      padding-right: 14px;
+      white-space: pre;
+    }
+
+    .diff-row .ln {
+      color: #8D8A80;
+      padding-right: 14px;
+      text-align: right;
+      user-select: none;
+    }
+
+    .diff-row .sign {
+      color: #8D8A80;
+      text-align: center;
+    }
+
+    .diff-row.add {
+      background: rgba(120, 140, 93, 0.18);
+    }
+
+    .diff-row.add .sign {
+      color: #A6BE77;
+    }
+
+    .diff-row.del {
+      background: rgba(168, 79, 61, 0.18);
+    }
+
+    .diff-row.del .sign {
+      color: #D88778;
+    }
+
+    .diff-row.focus {
+      background: rgba(166, 120, 214, 0.21);
+    }
+
+    details {
+      margin-top: 16px;
+    }
+
+    summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 15px 18px;
+      cursor: pointer;
+      list-style: none;
+      font-family: var(--mh-serif);
+      font-size: 20px;
+    }
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    summary::after {
+      content: "+";
+      color: var(--mh-plum-dark);
+      font-family: var(--mh-mono);
+      font-size: 18px;
+    }
+
+    details[open] summary::after {
+      content: "-";
+    }
+
+    details .detail-body {
+      padding: 0 18px 18px;
+      color: var(--mh-muted);
+    }
+
+    .diagram-panel {
+      border: 1.5px solid var(--mh-line);
+      border-radius: 14px;
+      background: var(--mh-paper);
+      padding: 16px;
+      overflow-x: auto;
+    }
+
+    .diagram-panel svg {
+      display: block;
+      min-width: 760px;
+      width: 100%;
+      height: auto;
+    }
+
+    .node rect {
+      fill: #fff;
+      stroke: var(--mh-line);
+      stroke-width: 2;
+    }
+
+    .node.core rect {
+      stroke: var(--mh-plum-dark);
+      fill: var(--mh-serum);
+    }
+
+    .node text {
+      fill: var(--mh-slate);
+      font-family: var(--mh-sans);
+      font-size: 15px;
+      font-weight: 750;
+    }
+
+    .node .sub {
+      fill: var(--mh-muted);
+      font-size: 12px;
+      font-family: var(--mh-mono);
+      font-weight: 650;
+    }
+
+    .lane-label {
+      fill: var(--mh-muted);
+      font-family: var(--mh-mono);
+      font-size: 12px;
+      font-weight: 750;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .edge {
+      fill: none;
+      stroke: #9D9A90;
+      stroke-width: 2.2;
+    }
+
+    .edge.main {
+      stroke: var(--mh-plum-dark);
+    }
+
+    .footnote {
+      margin-top: 30px;
+      padding-top: 18px;
+      border-top: 1.5px solid var(--mh-line);
+      color: var(--mh-muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 860px) {
+      .wrap {
+        width: min(100% - 30px, 1120px);
+      }
+
+      .masthead {
+        padding-top: 46px;
+      }
+
+      h1 {
+        font-size: 42px;
+      }
+
+      .deck {
+        font-size: 17px;
+      }
+
+      .section-head {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      .section-title h2 {
+        font-size: 28px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .diff-row {
+        grid-template-columns: 42px 18px minmax(440px, 1fr);
+      }
+    }
+
+    @media (max-width: 520px) {
+      .toc-shell {
+        position: static;
+      }
+
+      .toc a,
+      .chip,
+      .copy-btn {
+        max-width: 100%;
+        white-space: normal;
+      }
+
+      .tabbar button {
+        flex: 1 1 138px;
+        border-bottom: 1px solid var(--mh-line);
+      }
+
+      .code-head,
+      .diff-head,
+      summary {
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="masthead">
+    <div class="wrap">
+      <p class="eyebrow">make-html default theme</p>
+      <h1>Fallback style with a <span>plum</span> accent</h1>
+      <p class="deck">This page tests the default theme used when a source project has no discoverable styles. It keeps the original HTML-artifact feel: ivory paper, serif hierarchy, wrapped controls, compact cards, and code examples that are designed rather than dumped.</p>
+      <div class="meta-row" aria-label="theme checks">
+        <span class="meta-pill">source styles: none</span>
+        <span class="meta-pill">accent: --mh-plum #A678D6</span>
+        <span class="meta-pill">controls: wrap, no scroll strips</span>
+        <span class="meta-pill">code: tabs, copy, diff, details</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="toc-shell">
+    <nav class="wrap toc" aria-label="Page sections">
+      <a href="#contract" aria-current="true">Contract</a>
+      <a href="#examples">Code Examples</a>
+      <a href="#diagram">Diagram</a>
+      <a href="#validation">Validation Notes</a>
+    </nav>
+  </div>
+
+  <main class="wrap">
+    <section id="contract">
+      <div class="section-head">
+        <div class="index">01 / Theme</div>
+        <div>
+          <div class="section-title">
+            <h2>Fallback contract</h2>
+            <p>Use this style only after a quick source-style search fails. It is intentionally generic, but not bland.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <article class="card">
+          <h3>Paper first</h3>
+          <p>The base is ivory and paper with visible borders. It reads as a designed document rather than an app shell.</p>
+          <div class="token-row">
+            <span class="swatch"><i style="--tone:var(--mh-ivory)"></i>ivory</span>
+            <span class="swatch"><i style="--tone:var(--mh-paper)"></i>paper</span>
+            <span class="swatch"><i style="--tone:var(--mh-line)"></i>line</span>
+          </div>
+        </article>
+        <article class="card">
+          <h3>Plum accent</h3>
+          <p>The site-inspired orange/clay accent is replaced by light plum for section rules, active tabs, links, and highlights.</p>
+          <div class="token-row">
+            <span class="swatch"><i style="--tone:var(--mh-plum)"></i>plum</span>
+            <span class="swatch"><i style="--tone:var(--mh-plum-dark)"></i>plum-dark</span>
+            <span class="swatch"><i style="--tone:var(--mh-plum-soft)"></i>plum-soft</span>
+          </div>
+        </article>
+        <article class="card">
+          <h3>Controls wrap and select</h3>
+          <p>Jump links, chips, tabs, legends, and button rows wrap. Selectable controls update state; only code panes, diffs, tables, and large diagrams may scroll internally.</p>
+          <div class="token-row" data-chip-group aria-label="Selectable control samples">
+            <button class="chip" type="button" aria-pressed="true">Jump links</button>
+            <button class="chip" type="button" aria-pressed="false">Filter chips</button>
+            <button class="chip" type="button" aria-pressed="false">Legends</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="examples">
+      <div class="section-head">
+        <div class="index">02 / Code</div>
+        <div>
+          <div class="section-title">
+            <h2>Code examples</h2>
+            <p>Tabs, concise headers, copy buttons, collapsible depth, and diff blocks are now part of the default theme guidance.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="code-tabs" data-code-tabs>
+        <div class="tabbar" role="tablist" aria-label="Example code">
+          <button type="button" class="is-active" id="tab-css" role="tab" aria-selected="true" aria-controls="panel-css" data-tab="css">tokens.css</button>
+          <button type="button" id="tab-html" role="tab" aria-selected="false" aria-controls="panel-html" data-tab="html">artifact.html</button>
+          <button type="button" id="tab-js" role="tab" aria-selected="false" aria-controls="panel-js" data-tab="js">tabs.js</button>
+        </div>
+        <div class="code-head">
+          <span class="file-label" data-current-file>tokens.css</span>
+          <button class="copy-btn" type="button" data-copy-current>Copy active code</button>
+        </div>
+        <pre class="code-panel is-active" id="panel-css" role="tabpanel" aria-labelledby="tab-css" data-panel="css"><code>:root {
+  --mh-ivory: #FAF9F5;
+  --mh-paper: #FFFFFF;
+  --mh-slate: #141413;
+  <span class="mark">--mh-plum: #A678D6;</span>
+  --mh-plum-dark: #7B55B6;
+  --mh-line: #D8D4C8;
+}
+
+.toc,
+.tabbar,
+.token-row {
+  display: flex;
+  <span class="mark">flex-wrap: wrap;</span>
+  gap: 10px;
+}</code></pre>
+        <pre class="code-panel" id="panel-html" role="tabpanel" aria-labelledby="tab-html" data-panel="html"><code>&lt;section class="callout"&gt;
+  &lt;strong&gt;Use source style first&lt;/strong&gt;
+  &lt;p&gt;If no style exists, switch to the plum fallback theme.&lt;/p&gt;
+&lt;/section&gt;
+
+&lt;div class="code-tabs" data-code-tabs&gt;
+  &lt;div class="tabbar" role="tablist"&gt;
+    &lt;button class="is-active" data-tab="css"&gt;CSS&lt;/button&gt;
+    &lt;button data-tab="html"&gt;HTML&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+        <pre class="code-panel" id="panel-js" role="tabpanel" aria-labelledby="tab-js" data-panel="js"><code>document.addEventListener("click", (event) =&gt; {
+  const tab = event.target.closest("[data-tab]");
+  if (!tab) return;
+
+  const group = tab.closest("[data-code-tabs]");
+  const selected = tab.dataset.tab;
+
+  group.querySelectorAll("[data-tab]").forEach((button) =&gt; {
+    button.classList.toggle("is-active", button === tab);
+    button.setAttribute("aria-selected", String(button === tab));
+  });
+
+  group.querySelectorAll("[data-panel]").forEach((panel) =&gt; {
+    panel.classList.toggle("is-active", panel.dataset.panel === selected);
+  });
+});</code></pre>
+      </div>
+
+      <details>
+        <summary>Collapsible example guidance</summary>
+        <div class="detail-body">
+          <p>Use details blocks for optional implementation depth. Keep the summary human-readable, then place long examples, caveats, or full snippets inside the body. This keeps the page skim-first without hiding useful detail from an agent or reviewer.</p>
+        </div>
+      </details>
+
+      <article class="diff-card" style="margin-top:16px">
+        <div class="diff-head">
+          <span class="file-label">references/fallback-theme.md</span>
+          <button class="copy-btn" type="button" data-copy-target="diff-sample">Copy diff</button>
+        </div>
+        <pre class="diff" id="diff-sample"><code><span class="diff-row del"><span class="ln">14</span><span class="sign">-</span><span>Use a neutral gray default when no brand exists.</span></span>
+<span class="diff-row add"><span class="ln">14</span><span class="sign">+</span><span>Use the ivory paper fallback with light plum as the primary accent.</span></span>
+<span class="diff-row focus"><span class="ln">15</span><span class="sign">+</span><span>Code examples should use tabs, collapsible detail, copy buttons, or diff blocks.</span></span>
+<span class="diff-row add"><span class="ln">16</span><span class="sign">+</span><span>Chip-like controls wrap; only code panes may scroll internally.</span></span></code></pre>
+      </article>
+    </section>
+
+    <section id="diagram">
+      <div class="section-head">
+        <div class="index">03 / Layout</div>
+        <div>
+          <div class="section-title">
+            <h2>Lane-based diagram</h2>
+            <p>The fallback theme still requires routed diagrams. The style is quiet; the structure does the work.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="diagram-panel">
+        <svg viewBox="0 0 920 360" role="img" aria-labelledby="diagram-title diagram-desc">
+          <title id="diagram-title">Fallback artifact flow</title>
+          <desc id="diagram-desc">A non-crossing flow from source style search to fallback theme and validation.</desc>
+          <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"></path>
+            </marker>
+          </defs>
+          <rect x="24" y="40" width="872" height="86" rx="14" fill="#F6F4EC" stroke="#D8D4C8"></rect>
+          <rect x="24" y="198" width="872" height="86" rx="14" fill="#F6F4EC" stroke="#D8D4C8"></rect>
+          <text class="lane-label" x="44" y="72">Discovery</text>
+          <text class="lane-label" x="44" y="230">Artifact</text>
+
+          <g class="node" transform="translate(160 54)">
+            <rect width="170" height="58" rx="12"></rect>
+            <text x="18" y="25">Search styles</text>
+            <text class="sub" x="18" y="44">tokens, CSS, UI</text>
+          </g>
+          <g class="node" transform="translate(390 54)">
+            <rect width="170" height="58" rx="12"></rect>
+            <text x="18" y="25">No source found</text>
+            <text class="sub" x="18" y="44">use fallback</text>
+          </g>
+          <g class="node core" transform="translate(620 54)">
+            <rect width="170" height="58" rx="12"></rect>
+            <text x="18" y="25">Plum theme</text>
+            <text class="sub" x="18" y="44">paper + code UI</text>
+          </g>
+
+          <g class="node core" transform="translate(160 212)">
+            <rect width="170" height="58" rx="12"></rect>
+            <text x="18" y="25">Build artifact</text>
+            <text class="sub" x="18" y="44">sections, cards, tabs</text>
+          </g>
+          <g class="node" transform="translate(390 212)">
+            <rect width="170" height="58" rx="12"></rect>
+            <text x="18" y="25">Validate</text>
+            <text class="sub" x="18" y="44">mobile + controls</text>
+          </g>
+          <g class="node" transform="translate(620 212)">
+            <rect width="170" height="58" rx="12"></rect>
+            <text x="18" y="25">Deliver</text>
+            <text class="sub" x="18" y="44">self-contained HTML</text>
+          </g>
+
+          <path class="edge" marker-end="url(#arrow)" d="M330 83 H386"></path>
+          <path class="edge main" marker-end="url(#arrow)" d="M560 83 H616"></path>
+          <path class="edge main" marker-end="url(#arrow)" d="M705 112 V168 H245 V208"></path>
+          <path class="edge" marker-end="url(#arrow)" d="M330 241 H386"></path>
+          <path class="edge" marker-end="url(#arrow)" d="M560 241 H616"></path>
+        </svg>
+      </div>
+    </section>
+
+    <section id="validation">
+      <div class="section-head">
+        <div class="index">04 / QA</div>
+        <div>
+          <div class="section-title">
+            <h2>Validation notes</h2>
+            <p>This artifact is built to make the updated skill requirements directly testable.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>Expected checks:</strong>
+        nav and chip controls wrap, selected nav/chip state updates, no page-level horizontal overflow on mobile, code tabs switch panels, copy buttons read from the active snippet or target block, and the diagram uses routed non-crossing edges.
+      </div>
+
+      <p class="footnote">Source inspiration: the referenced HTML-effectiveness examples use editorial typography, ivory/paper surfaces, pill navigation, collapsible sections, tabbed code samples, and diff-like review blocks. This fallback preserves that spirit while replacing the orange/clay accent with light plum.</p>
+    </section>
+  </main>
+
+  <script>
+    const fileNames = {
+      css: "tokens.css",
+      html: "artifact.html",
+      js: "tabs.js"
+    };
+
+    function textFromElement(element) {
+      return element ? element.innerText.replace(/\n{3,}/g, "\n\n").trim() : "";
+    }
+
+    function updateCurrentNav(sectionId) {
+      const current = sectionId || location.hash || "#contract";
+      document.querySelectorAll(".toc a").forEach((link) => {
+        if (link.getAttribute("href") === current) {
+          link.setAttribute("aria-current", "true");
+        } else {
+          link.removeAttribute("aria-current");
+        }
+      });
+    }
+
+    async function copyText(text, button) {
+      if (!text) return;
+      const original = button.textContent;
+      try {
+        await navigator.clipboard.writeText(text);
+        button.textContent = "Copied";
+      } catch (_error) {
+        const area = document.createElement("textarea");
+        area.value = text;
+        area.setAttribute("readonly", "");
+        area.style.position = "fixed";
+        area.style.opacity = "0";
+        document.body.appendChild(area);
+        area.select();
+        document.execCommand("copy");
+        area.remove();
+        button.textContent = "Copied";
+      }
+      window.setTimeout(() => {
+        button.textContent = original;
+      }, 1000);
+    }
+
+    document.addEventListener("click", (event) => {
+      const navLink = event.target.closest(".toc a");
+      if (navLink) {
+        updateCurrentNav(navLink.getAttribute("href"));
+        return;
+      }
+
+      const chip = event.target.closest("[data-chip-group] .chip");
+      if (chip) {
+        const group = chip.closest("[data-chip-group]");
+        group.querySelectorAll(".chip").forEach((button) => {
+          button.setAttribute("aria-pressed", String(button === chip));
+        });
+        return;
+      }
+
+      const tab = event.target.closest("[data-tab]");
+      if (tab) {
+        const group = tab.closest("[data-code-tabs]");
+        const selected = tab.dataset.tab;
+        group.querySelectorAll("[data-tab]").forEach((button) => {
+          const isActive = button === tab;
+          button.classList.toggle("is-active", isActive);
+          button.setAttribute("aria-selected", String(isActive));
+        });
+        group.querySelectorAll("[data-panel]").forEach((panel) => {
+          panel.classList.toggle("is-active", panel.dataset.panel === selected);
+        });
+        const file = group.querySelector("[data-current-file]");
+        if (file) file.textContent = fileNames[selected] || selected;
+        return;
+      }
+
+      const activeCopy = event.target.closest("[data-copy-current]");
+      if (activeCopy) {
+        const group = activeCopy.closest("[data-code-tabs]");
+        copyText(textFromElement(group.querySelector(".code-panel.is-active")), activeCopy);
+        return;
+      }
+
+      const targetCopy = event.target.closest("[data-copy-target]");
+      if (targetCopy) {
+        copyText(textFromElement(document.getElementById(targetCopy.dataset.copyTarget)), targetCopy);
+      }
+    });
+
+    window.addEventListener("hashchange", () => updateCurrentNav());
+    updateCurrentNav();
+  </script>
+</body>
+</html>

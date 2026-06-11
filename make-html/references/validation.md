@@ -1,0 +1,85 @@
+# Validation
+
+Validate substantial HTML artifacts before returning them. The goal is to catch broken rendering, missing dynamic content, accidental external dependencies, and responsive layout failures.
+
+## Static Checks
+
+- Confirm the file includes `<!doctype html>`, `<html lang="en">`, `<meta charset="utf-8">`, viewport meta, and a meaningful `<title>`.
+- Confirm CSS and JavaScript are inline unless the user explicitly asked for a multi-file project.
+- Scan for accidental external dependencies: `<script src>`, stylesheet `<link>`, `@import`, CDN URLs, remote fonts, and network-only assets.
+- If the artifact should be offline, treat external dependencies as defects.
+- Check that source references, assumptions, counts, and labels needed to understand the artifact are visible in the page.
+
+## Render Checks
+
+Use the strongest browser path available in the environment:
+
+1. Preferred: browser automation that can navigate to the file, evaluate JavaScript, click controls, inspect console errors, and capture screenshots.
+2. Good fallback: installed Chrome or Chromium in headless mode with a throwaway profile.
+3. Minimal fallback: parse the rendered DOM or inspect the file statically, then state that browser rendering was not available.
+
+For JavaScript artifacts, verify the rendered DOM, not only the source file. Count generated cards, rows, SVG nodes, tabs, filters, selected states, or other expected dynamic output.
+
+For interactive artifacts, exercise at least one meaningful interaction:
+
+- click a tab, filter, node, row, toggle, or export button
+- confirm selected/active state changes
+- confirm the relevant `aria-selected`, `aria-pressed`, `aria-current`, checked state, or selected class changes with the visual state
+- confirm the detail panel, preview, counts, or export output updates
+
+## Responsive Checks
+
+Check at least one desktop viewport and one narrow viewport around 390px wide.
+
+- Page-level `document.documentElement.scrollWidth` should not exceed `clientWidth`.
+- Horizontal scrolling is acceptable only inside intentional containers such as `.table-wrap`, code blocks, or large diagrams.
+- Chip-like rows must not horizontally scroll. Inspect jump links, filter chips, segmented controls, badge rows, button groups, tag rows, and legends; they should wrap onto additional lines.
+- Long paths, URLs, hashes, branch names, package names, and commands should wrap inside their container.
+- Headings should not be clipped or force the viewport wider.
+- Buttons, chips, cards, table cells, and SVG labels should not overlap incoherently.
+- Avoid viewport-unit font sizing. Use explicit font sizes with media-query breakpoints.
+
+Useful CSS defaults:
+
+```css
+code,
+pre,
+.long-token {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+img,
+svg,
+canvas {
+  max-width: 100%;
+}
+```
+
+## Screenshot Review
+
+When screenshots are available, inspect them. Do not accept a screenshot merely because it exists.
+
+Look for:
+
+- blank or partially painted pages
+- clipped headings
+- text spilling out of cards or callouts
+- chip, filter, or jump-link rows clipped behind horizontal scrolling
+- path/code tokens widening the page
+- unreadable SVG labels
+- arrows crossing through unrelated nodes or each other in a way that makes direction unclear
+- missing active states
+- controls detached from the content they affect
+
+If the screenshot reveals a layout defect, patch the artifact and rerun the relevant check.
+
+## Reporting
+
+Keep the final response brief. Mention the checks that matter:
+
+- static self-containment check
+- browser render or fallback used
+- dynamic DOM/interaction check when relevant
+- desktop and narrow viewport check
+- any checks that could not be run
