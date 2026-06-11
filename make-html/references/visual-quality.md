@@ -37,6 +37,14 @@ The artifact should look like a useful custom interface, not a generic decorated
 - Let large diagrams scroll or scale only when wrapping would destroy the diagram. Explain that the diagram is intentionally scrollable when it is.
 - Keep buttons, filters, and export controls close to the content they affect.
 
+## Motion And Hover
+
+- Use motion as an affordance, not decoration. Interactive cards, rows, and diagram nodes may lift 1-4px, strengthen their border, or move a trailing arrow slightly.
+- Card hover should be tasteful and compound: slight lift, darker border, soft shadow, subtle media/header tint, and an emphasized file/action label.
+- Mirror hover states with `:focus-visible`; keyboard focus should feel as intentional as pointer hover.
+- Avoid hover-only content. Any text, count, warning, or action needed to understand the card must be visible without hover.
+- Respect `prefers-reduced-motion: reduce` by removing transforms and nonessential transitions.
+
 ## Diagrams
 
 - Use inline SVG for flowcharts, architecture maps, timelines, rings, dependency graphs, and annotated figures.

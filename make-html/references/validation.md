@@ -26,6 +26,7 @@ For interactive artifacts, exercise at least one meaningful interaction:
 - confirm selected/active state changes
 - confirm the relevant `aria-selected`, `aria-pressed`, `aria-current`, checked state, or selected class changes with the visual state
 - confirm the detail panel, preview, counts, or export output updates
+- when cards are primary navigation or selectable items, hover or focus one card and confirm the affordance is visible without layout shift
 
 ## Responsive Checks
 
@@ -70,6 +71,7 @@ Look for:
 - unreadable SVG labels
 - arrows crossing through unrelated nodes or each other in a way that makes direction unclear
 - missing active states
+- missing hover/focus affordance on clickable cards, rows, or diagram nodes
 - controls detached from the content they affect
 
 If the screenshot reveals a layout defect, patch the artifact and rerun the relevant check.

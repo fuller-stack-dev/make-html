@@ -10,6 +10,7 @@ Use this catalog when a task matches one of the HTML-effectiveness example famil
 - Build real interactions when controls imply state. Tabs, filters, chips, deck navigation, selected nodes, toggles, and editors must update visible state and ARIA state.
 - Chip-like controls wrap. Only code panes, diffs, dense tables, and large diagrams may scroll horizontally.
 - Code examples need a designed container: file label, tabs or collapsible detail when useful, line numbers or diff rows when reviewing, and copy buttons when reuse is likely.
+- Clickable cards should feel clickable: use a slight lift, stronger border, soft shadow, thumbnail/header tint change, and small arrow/file-label motion on hover and `:focus-visible`.
 
 ## Page Recipes
 
@@ -28,6 +29,12 @@ Use when the user needs to react to UI directions before choosing one.
 - Layout: toolbar/controls, 4-up visual direction board, live mini artboards, palette/tone tags, rationale captions.
 - Include: structurally different directions, not only color swaps; selected-state preview if a direction can be chosen.
 - Avoid: generic mood boards without rendered UI.
+
+Homepage/card-index variant:
+
+- Use when presenting a gallery of examples, routes, demos, choices, or generated artifacts.
+- Render each item as an anchor card with a media/thumb band, serif title, short description, filename/action row, and trailing arrow.
+- Hover/focus should promote the card with lift, darker border, warmer/tinted thumb band, stronger shadow, and arrow movement. Neighboring cards remain quiet.
 
 ### 03-code-review-pr.html — Code Review: Annotated Pull Request
 

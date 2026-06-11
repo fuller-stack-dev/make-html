@@ -69,6 +69,64 @@ Cards:
 
 - Use flat paper surfaces, thin borders, and dense content. Do not nest cards inside cards.
 - Use small top labels and compact metadata rows to improve scan speed.
+- When cards are clickable or selectable, add a tasteful hover/focus affordance: a 2-4px lift, slightly stronger border, stronger but still soft shadow, subtle thumbnail/header-band tint shift, and a small movement on the arrow or trailing action.
+- Mirror hover styles with `:focus-visible` for keyboard users and keep the focus ring visible.
+- Do not reveal essential information only on hover. Hover should confirm affordance and focus, not hide content from touch or keyboard users.
+
+Interactive card baseline:
+
+```css
+.artifact-card {
+  display: block;
+  border: 1.5px solid var(--mh-line);
+  border-radius: 14px;
+  background: var(--mh-paper);
+  color: inherit;
+  text-decoration: none;
+  overflow: hidden;
+  transition: transform 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+}
+.artifact-card:hover,
+.artifact-card:focus-visible {
+  transform: translateY(-3px);
+  border-color: var(--mh-slate);
+  box-shadow: 0 14px 34px rgba(20, 20, 19, 0.12);
+  outline: none;
+}
+.artifact-card .thumb {
+  background: var(--mh-faint);
+  transition: background 150ms ease;
+}
+.artifact-card:hover .thumb,
+.artifact-card:focus-visible .thumb {
+  background: var(--mh-oat);
+}
+.artifact-card .arrow {
+  color: var(--mh-muted);
+  transition: transform 150ms ease, color 150ms ease;
+}
+.artifact-card:hover .file,
+.artifact-card:focus-visible .file,
+.artifact-card:hover .arrow,
+.artifact-card:focus-visible .arrow {
+  color: var(--mh-plum-dark);
+}
+.artifact-card:hover .arrow,
+.artifact-card:focus-visible .arrow {
+  transform: translateX(3px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .artifact-card,
+  .artifact-card .thumb,
+  .artifact-card .arrow {
+    transition: none;
+  }
+  .artifact-card:hover,
+  .artifact-card:focus-visible {
+    transform: none;
+  }
+}
+```
 
 Diagrams:
 
