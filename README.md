@@ -6,7 +6,7 @@ It is designed for any agent that can read local skill instructions. The skill i
 
 Inspired by [The unreasonable effectiveness of HTML](https://thariqs.github.io/html-effectiveness/), with additional rules for source-style extraction, wrapping controls, routed diagrams, real selected states, and browser validation.
 
-![Fallback theme preview](examples/images/fallback-theme-preview.png)
+![Feature showcase preview](examples/images/feature-showcase-preview.png)
 
 ## What It Does
 
@@ -93,9 +93,31 @@ The installable skill lives in [`make-html/`](make-html/):
 - [`references/validation.md`](make-html/references/validation.md): static, browser, interaction, responsive, and screenshot checks
 - [`references/visual-quality.md`](make-html/references/visual-quality.md): typography, layout, diagrams, code blocks, and taste defaults
 
-## Example Artifact
+## Example Artifacts
 
-This repo includes the fallback-theme test artifact used to validate the skill:
+This repo includes two self-contained HTML artifacts that demonstrate the skill guidance:
+
+### Feature showcase
+
+- [`examples/feature-showcase.html`](examples/feature-showcase.html)
+- [`examples/images/feature-showcase-preview.png`](examples/images/feature-showcase-preview.png)
+- [`examples/images/feature-showcase-board-preview.png`](examples/images/feature-showcase-board-preview.png)
+- [`examples/images/feature-showcase-mobile-preview.png`](examples/images/feature-showcase-mobile-preview.png)
+
+The showcase uses generic Project Atlas data to exercise the broad artifact surface:
+
+- Card gallery with real links, hover/focus states, filters, and selected detail
+- Routed SVG architecture map with bounded fit
+- Tabbed code examples, diff blocks, collapsible notes, and copy controls
+- Compact token swatches and component states
+- Status report, trend chart, and timeline
+- Kanban workbench with drag/drop, click fallback, lane counts, estimates, and Markdown export
+- Slide deck with previous/next arrow buttons, left/right keyboard navigation, synced progress, and motion tuning controls
+- Mobile behavior without page-level horizontal overflow
+
+### Fallback theme test
+
+The fallback-theme test artifact focuses on the default visual language:
 
 - [`examples/fallback-theme-test.html`](examples/fallback-theme-test.html)
 - [`examples/images/fallback-theme-preview.png`](examples/images/fallback-theme-preview.png)

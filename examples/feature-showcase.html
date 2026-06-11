@@ -1,0 +1,1580 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Project Atlas artifact workspace</title>
+  <style>
+    :root {
+      --ivory: #FAF9F5;
+      --paper: #FFFFFF;
+      --slate: #141413;
+      --muted: #67665F;
+      --faint: #F0EEE6;
+      --line: #D8D4C8;
+      --oat: #E3DACC;
+      --olive: #788C5D;
+      --plum: #A678D6;
+      --plum-dark: #7B55B6;
+      --plum-soft: rgba(166, 120, 214, 0.16);
+      --rust: #A84F3D;
+      --blue: #557C99;
+      --serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+      --sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      color-scheme: light;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.68), rgba(250,249,245,0) 380px),
+        radial-gradient(circle at 92% 8%, rgba(166,120,214,0.08), transparent 300px),
+        var(--ivory);
+      color: var(--slate);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.55;
+    }
+    a { color: inherit; }
+    button, input, textarea { font: inherit; }
+    code { font-family: var(--mono); }
+    :not(pre) > code {
+      padding: 2px 5px;
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      background: var(--faint);
+      overflow-wrap: anywhere;
+      font-size: 0.92em;
+    }
+
+    .wrap { width: min(1160px, calc(100% - 48px)); margin: 0 auto; }
+    .masthead {
+      padding: 72px 0 44px;
+      border-bottom: 1.5px solid var(--line);
+    }
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 750;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { content: ""; width: 42px; height: 2px; background: var(--plum); }
+    h1, h2, h3 {
+      margin: 0;
+      font-family: var(--serif);
+      font-weight: 520;
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+    h1 { max-width: 16ch; font-size: 62px; }
+    h1 span { color: var(--plum-dark); font-style: italic; }
+    .deck {
+      max-width: 780px;
+      margin: 22px 0 0;
+      color: var(--muted);
+      font-size: 19px;
+    }
+    .meta-row, .toc, .chip-row, .legend, .toolbar, .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      overflow-x: visible;
+    }
+    .meta-row { margin-top: 26px; }
+    .pill, .toc a, .chip, .copy-btn, .small-btn, .seg-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 34px;
+      padding: 7px 12px;
+      border: 1.5px solid var(--line);
+      border-radius: 999px;
+      background: var(--paper);
+      color: var(--slate);
+      text-decoration: none;
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 750;
+      cursor: pointer;
+      transition: border-color 150ms ease, box-shadow 150ms ease, color 150ms ease, background 150ms ease, transform 150ms ease;
+    }
+    .pill { color: var(--muted); cursor: default; }
+    .toc-shell {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1.5px solid var(--line);
+      background: rgba(250,249,245,0.92);
+      backdrop-filter: blur(14px);
+    }
+    .toc { padding: 14px 0; }
+    .toc a:hover,
+    .toc a:focus-visible,
+    .chip:hover,
+    .chip:focus-visible,
+    .copy-btn:hover,
+    .copy-btn:focus-visible,
+    .small-btn:hover,
+    .small-btn:focus-visible,
+    .seg-btn:hover,
+    .seg-btn:focus-visible {
+      border-color: var(--plum);
+      box-shadow: 0 0 0 4px var(--plum-soft);
+      outline: none;
+    }
+    .toc a[aria-current="true"],
+    .chip[aria-pressed="true"],
+    .seg-btn[aria-selected="true"] {
+      color: var(--paper);
+      border-color: var(--slate);
+      background: var(--slate);
+      box-shadow: inset 0 -3px 0 var(--plum);
+    }
+
+    main { padding: 48px 0 96px; }
+    section { margin-top: 48px; scroll-margin-top: 96px; }
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(82px, auto) minmax(0, 1fr);
+      gap: 24px;
+      align-items: baseline;
+      margin-bottom: 20px;
+    }
+    .index {
+      color: var(--plum-dark);
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 850;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .section-title {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: baseline;
+      justify-content: space-between;
+      padding-bottom: 16px;
+      border-bottom: 1.5px solid var(--line);
+    }
+    .section-title h2 { font-size: 34px; }
+    .section-title p { max-width: 650px; margin: 0; color: var(--muted); }
+
+    .summary-band {
+      display: grid;
+      grid-template-columns: 1.2fr repeat(3, minmax(0, .72fr));
+      gap: 14px;
+      margin-top: 26px;
+    }
+    .summary, .metric, .panel, .card, .diagram-panel, .code-tabs, .diff-card, details, .board, .slide-shell {
+      border: 1.5px solid var(--line);
+      border-radius: 14px;
+      background: var(--paper);
+      box-shadow: 0 16px 38px rgba(20,20,19,0.045);
+    }
+    .summary { padding: 22px; border-left: 5px solid var(--plum); }
+    .summary strong { display: block; margin-bottom: 8px; font-family: var(--serif); font-size: 23px; font-weight: 520; }
+    .summary p { margin: 0; color: var(--muted); }
+    .metric { padding: 18px; }
+    .metric .label { color: var(--muted); font-family: var(--mono); font-size: 12px; font-weight: 750; text-transform: uppercase; }
+    .metric .num { margin-top: 10px; font-family: var(--serif); font-size: 36px; line-height: 1; }
+    .metric .delta { margin-top: 8px; color: var(--olive); font-family: var(--mono); font-size: 12px; font-weight: 750; }
+    .metric.warn .delta { color: var(--rust); }
+
+    .gallery-tools {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .search {
+      min-height: 38px;
+      min-width: min(320px, 100%);
+      border: 1.5px solid var(--line);
+      border-radius: 999px;
+      background: var(--paper);
+      padding: 8px 14px;
+      color: var(--slate);
+      outline: none;
+    }
+    .search:focus { border-color: var(--plum); box-shadow: 0 0 0 4px var(--plum-soft); }
+    .artifact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+      gap: 16px;
+    }
+    .artifact-card {
+      display: block;
+      min-height: 100%;
+      border: 1.5px solid var(--line);
+      border-radius: 14px;
+      background: var(--paper);
+      color: inherit;
+      text-decoration: none;
+      overflow: hidden;
+      transition: transform 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+    }
+    .artifact-card:hover,
+    .artifact-card:focus-visible,
+    .artifact-card.is-selected {
+      transform: translateY(-3px);
+      border-color: var(--slate);
+      box-shadow: 0 14px 34px rgba(20,20,19,0.12);
+      outline: none;
+    }
+    .thumb {
+      min-height: 118px;
+      display: grid;
+      place-items: center;
+      border-bottom: 1.5px solid var(--line);
+      background: var(--faint);
+      transition: background 150ms ease;
+    }
+    .artifact-card:hover .thumb,
+    .artifact-card:focus-visible .thumb,
+    .artifact-card.is-selected .thumb { background: var(--oat); }
+    .thumb svg { width: 168px; height: 86px; }
+    .thumb .ink { stroke: #85837c; stroke-width: 5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    .thumb .paper { fill: #fff; stroke: #85837c; stroke-width: 5; }
+    .thumb .accent { fill: var(--plum); stroke: none; }
+    .thumb .soft { fill: #d4cfc2; stroke: none; }
+    .artifact-body { padding: 18px 20px 16px; }
+    .artifact-body h3 { font-size: 23px; }
+    .artifact-body p { min-height: 72px; margin: 10px 0 16px; color: var(--muted); }
+    .file-row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 12px;
+      overflow-wrap: anywhere;
+    }
+    .file-row .arrow {
+      flex: 0 0 auto;
+      transition: transform 150ms ease, color 150ms ease;
+    }
+    .artifact-card:hover .file-row,
+    .artifact-card:focus-visible .file-row,
+    .artifact-card.is-selected .file-row,
+    .artifact-card:hover .arrow,
+    .artifact-card:focus-visible .arrow,
+    .artifact-card.is-selected .arrow { color: var(--plum-dark); }
+    .artifact-card:hover .arrow,
+    .artifact-card:focus-visible .arrow,
+    .artifact-card.is-selected .arrow { transform: translateX(3px); }
+
+    .recipe-detail {
+      margin-top: 18px;
+      padding: 18px;
+      border: 1.5px solid var(--line);
+      border-radius: 14px;
+      background: var(--paper);
+      box-shadow: 0 16px 38px rgba(20,20,19,0.045);
+      scroll-margin-top: 96px;
+    }
+    .recipe-detail h3 { font-size: 25px; margin-bottom: 8px; }
+    .recipe-detail p { margin: 0 0 14px; color: var(--muted); }
+    .recipe-meta {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .recipe-meta div {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--faint);
+      padding: 10px 12px;
+      min-width: 0;
+    }
+    .recipe-meta b {
+      display: block;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+    .recipe-meta span {
+      display: block;
+      margin-top: 4px;
+      overflow-wrap: anywhere;
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+
+    .compare-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+      gap: 16px;
+    }
+    .option {
+      min-width: 0;
+      padding: 18px;
+      border: 1.5px solid var(--line);
+      border-radius: 14px;
+      background: var(--paper);
+    }
+    .option.reco { border-color: var(--plum); box-shadow: 0 0 0 4px var(--plum-soft); }
+    .option > .pill { margin-bottom: 12px; }
+    .option h3 { font-size: 24px; margin-bottom: 10px; }
+    .option p { overflow-wrap: anywhere; }
+    .score {
+      display: grid;
+      gap: 8px;
+      margin: 14px 0;
+    }
+    .score-row { display: grid; grid-template-columns: minmax(54px, 72px) minmax(0, 1fr) auto; gap: 10px; align-items: center; font-size: 13px; }
+    .bar { min-width: 0; height: 8px; border-radius: 999px; background: var(--faint); overflow: hidden; }
+    .bar i { display: block; height: 100%; width: var(--w); background: var(--plum); border-radius: inherit; }
+    .option ul { margin: 12px 0 0; padding-left: 18px; color: var(--muted); }
+
+    .map-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(260px, .6fr);
+      gap: 16px;
+    }
+    .diagram-panel { padding: 24px; overflow: hidden; }
+    .diagram-panel svg { display: block; min-width: 0; width: 100%; max-width: 100%; height: auto; }
+    .lane { fill: #f6f4ec; stroke: var(--line); stroke-width: 1.5; }
+    .node rect { fill: var(--paper); stroke: #85837c; stroke-width: 2; }
+    .node text { fill: var(--slate); font-family: var(--sans); font-size: 15px; font-weight: 760; }
+    .node .sub { fill: var(--muted); font-family: var(--mono); font-size: 12px; font-weight: 650; }
+    .node { cursor: pointer; transition: transform 120ms ease; }
+    .node:hover, .node:focus-visible, .node.is-active { transform: translateY(-2px); outline: none; }
+    .node.is-active rect { stroke: var(--plum-dark); fill: #f8f0ff; }
+    .edge { fill: none; stroke: #9d9a90; stroke-width: 2.2; }
+    .edge.main { stroke: var(--plum-dark); }
+    .lane-label { fill: var(--muted); font-family: var(--mono); font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .detail-card { padding: 18px; }
+    .detail-card h3 { font-size: 25px; margin-bottom: 10px; }
+    .detail-card p { margin: 0 0 14px; color: var(--muted); }
+
+    .code-tabs, .diff-card { overflow: hidden; }
+    .tabbar {
+      display: flex;
+      flex-wrap: wrap;
+      border-bottom: 1.5px solid var(--line);
+      background: var(--faint);
+      overflow-x: visible;
+    }
+    .tabbar button {
+      min-height: 42px;
+      padding: 10px 15px;
+      border: 0;
+      border-right: 1px solid var(--line);
+      background: transparent;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 780;
+      cursor: pointer;
+    }
+    .tabbar button[aria-selected="true"] {
+      background: var(--paper);
+      color: var(--slate);
+      box-shadow: inset 0 -3px 0 var(--plum);
+    }
+    .code-head, .diff-head {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(250,249,245,.72);
+    }
+    .file-label { color: var(--muted); font-family: var(--mono); font-size: 12px; overflow-wrap: anywhere; }
+    .copy-btn, .small-btn { min-height: 30px; padding: 6px 10px; color: var(--plum-dark); }
+    pre { margin: 0; overflow-x: auto; }
+    .code-panel {
+      display: none;
+      padding: 16px 18px 18px;
+      font-family: var(--mono);
+      font-size: 12.5px;
+      line-height: 1.65;
+      tab-size: 2;
+    }
+    .code-panel.is-active { display: block; }
+    .comment { color: var(--muted); }
+    .mark { color: var(--plum-dark); font-weight: 850; }
+    .diff {
+      background: var(--slate);
+      color: #edeae0;
+      font-family: var(--mono);
+      font-size: 12.5px;
+      line-height: 1.7;
+      overflow-x: auto;
+    }
+    .diff-row {
+      display: grid;
+      grid-template-columns: 48px 18px minmax(560px, 1fr);
+      white-space: pre;
+    }
+    .diff-row .ln { color: #8d8a80; padding-right: 14px; text-align: right; user-select: none; }
+    .diff-row .sign { color: #8d8a80; text-align: center; }
+    .diff-row.add { background: rgba(120,140,93,.18); }
+    .diff-row.add .sign { color: #a6be77; }
+    .diff-row.del { background: rgba(168,79,61,.18); }
+    .diff-row.del .sign { color: #d88778; }
+    .diff-row.focus { background: rgba(166,120,214,.21); }
+    details { margin-top: 16px; overflow: hidden; }
+    summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 15px 18px;
+      cursor: pointer;
+      list-style: none;
+      font-family: var(--serif);
+      font-size: 20px;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::after { content: "+"; color: var(--plum-dark); font-family: var(--mono); }
+    details[open] summary::after { content: "-"; }
+    .detail-body { padding: 0 18px 18px; color: var(--muted); }
+
+    .design-grid, .report-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .swatch, .component, .timeline, .flag, .ticket, .slide {
+      border: 1.5px solid var(--line);
+      border-radius: 12px;
+      background: var(--paper);
+    }
+    .swatch {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+      padding: 14px;
+    }
+    .swatch i {
+      display: block;
+      flex: 0 0 34px;
+      width: 34px;
+      height: 34px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--tone);
+    }
+    .swatch b { display: block; font-family: var(--mono); font-size: 12px; }
+    .swatch span { display: block; color: var(--muted); font-family: var(--mono); font-size: 12px; }
+    .component { padding: 16px; }
+    .component h3 { font-size: 21px; margin-bottom: 8px; }
+    .demo-button { min-height: 36px; padding: 7px 12px; border: 1.5px solid var(--slate); border-radius: 9px; background: var(--slate); color: var(--paper); font-weight: 750; }
+    .demo-button.secondary { background: var(--paper); color: var(--slate); border-color: var(--line); }
+    .demo-button:disabled { opacity: .48; cursor: not-allowed; }
+    .field { width: 100%; min-height: 38px; border: 1.5px solid var(--line); border-radius: 9px; padding: 8px 10px; }
+    .report-grid { grid-template-columns: 1fr 1fr; }
+    .timeline { padding: 18px; }
+    .tl-entry { display: grid; grid-template-columns: 72px 1fr; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+    .tl-entry:last-child { border-bottom: 0; }
+    .tl-time { color: var(--plum-dark); font-family: var(--mono); font-size: 12px; font-weight: 800; }
+    .tl-entry p { margin: 0; color: var(--muted); }
+    .chart { padding: 18px; }
+    .chart svg { width: 100%; height: auto; }
+
+    .workbench {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    .board-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 12px;
+      border-bottom: 1.5px solid var(--line);
+    }
+    .board-summary {
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 13px;
+      overflow-wrap: anywhere;
+    }
+    .board-summary b { color: var(--slate); }
+    .board { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; align-items: start; }
+    .col {
+      min-width: 0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 260px;
+      border: 1.5px solid var(--line);
+      border-radius: 14px;
+      background: var(--paper);
+    }
+    .col[data-col="now"] { border-top: 4px solid var(--rust); }
+    .col[data-col="next"] { border-top: 4px solid var(--olive); }
+    .col[data-col="later"] { border-top: 4px solid #85837c; }
+    .col[data-col="cut"] { border-top: 4px solid var(--line); }
+    .col.dragover {
+      outline: 2px dashed var(--plum);
+      outline-offset: -7px;
+      background: #fbf7ff;
+    }
+    .col-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 14px 16px;
+      border-bottom: 1.5px solid var(--line);
+      background: var(--paper);
+    }
+    .col-head h3 {
+      font-size: 21px;
+      line-height: 1.05;
+    }
+    .count-badge {
+      min-width: 28px;
+      padding: 2px 8px;
+      border: 1.5px solid var(--line);
+      border-radius: 999px;
+      background: var(--faint);
+      color: var(--muted);
+      text-align: center;
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .col-body { min-height: 220px; padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+    .col-foot {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: auto;
+      padding: 10px 14px;
+      border-top: 1.5px solid var(--line);
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+    .col-foot b { color: var(--slate); }
+    .ticket {
+      width: 100%;
+      padding: 11px 12px 10px;
+      border: 1.5px solid var(--line);
+      border-radius: 10px;
+      background: var(--paper);
+      color: var(--slate);
+      text-align: left;
+      cursor: grab;
+      user-select: none;
+      transition: border-color 150ms ease, transform 150ms ease, box-shadow 150ms ease, opacity 150ms ease;
+    }
+    .ticket:hover, .ticket:focus-visible { transform: translateY(-2px); border-color: #85837c; box-shadow: 0 8px 18px rgba(20,20,19,.08); outline: none; }
+    .ticket:active { cursor: grabbing; }
+    .ticket.dragging { opacity: .45; }
+    .ticket.is-selected { border-color: var(--plum-dark); box-shadow: 0 0 0 4px var(--plum-soft); }
+    .ticket-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 7px;
+    }
+    .tid {
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .01em;
+    }
+    .ticket-tag {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 1px 7px 2px;
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 850;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .ticket-tag.bug { background: #f3e2dc; color: var(--rust); border-color: #e6c8be; }
+    .ticket-tag.feat { background: #e8ede0; color: #5c6f44; border-color: #cfdbc0; }
+    .ticket-tag.debt, .ticket-tag.chore { background: var(--faint); color: var(--muted); }
+    .ticket-size {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      margin-left: auto;
+      border: 1.5px solid var(--line);
+      border-radius: 6px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 850;
+    }
+    .ticket-title {
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: 720;
+      line-height: 1.34;
+    }
+    .ticket-bottom {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .owner {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--oat);
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 850;
+    }
+    .owner.o2 { background: #dce4d2; }
+    .owner.o3 { background: #ecd9ce; }
+    .owner.o4 { background: var(--faint); }
+    .editor-panel { padding: 18px; }
+    .editor-panel h3 { font-size: 24px; margin-bottom: 10px; }
+    .flag { padding: 12px; display: flex; gap: 12px; align-items: center; justify-content: space-between; margin: 10px 0; }
+    .flag code { background: transparent; border: 0; padding: 0; }
+    .toggle {
+      width: 46px;
+      height: 26px;
+      border: 1.5px solid var(--line);
+      border-radius: 999px;
+      background: var(--faint);
+      padding: 2px;
+      cursor: pointer;
+    }
+    .toggle i { display: block; width: 20px; height: 20px; border-radius: 50%; background: var(--muted); transition: transform 140ms ease, background 140ms ease; }
+    .toggle[aria-pressed="true"] i { transform: translateX(20px); background: var(--plum-dark); }
+    textarea {
+      width: 100%;
+      min-height: 132px;
+      resize: vertical;
+      border: 1.5px solid var(--line);
+      border-radius: 10px;
+      background: var(--paper);
+      padding: 12px;
+      color: var(--slate);
+      font-family: var(--mono);
+      font-size: 12.5px;
+      line-height: 1.55;
+    }
+    .export-box {
+      margin-top: 12px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--faint);
+      padding: 12px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 12px;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .slide-shell { overflow: hidden; }
+    .slide-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      border-bottom: 1.5px solid var(--line);
+      background: var(--faint);
+    }
+    .slide-nav {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+    .slide-track { position: relative; min-height: 260px; }
+    .slide {
+      display: none;
+      min-height: 260px;
+      padding: 28px;
+      border: 0;
+      border-radius: 0;
+      background: var(--paper);
+    }
+    .slide.is-active { display: grid; align-content: center; }
+    .slide h3 { font-size: 38px; }
+    .slide p { max-width: 680px; color: var(--muted); font-size: 18px; }
+    .motion-demo {
+      display: grid;
+      grid-template-columns: 1fr 260px;
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .motion-stage {
+      min-height: 210px;
+      display: grid;
+      place-items: center;
+      border: 1.5px solid var(--line);
+      border-radius: 14px;
+      background: var(--faint);
+    }
+    .pulse-card {
+      width: min(260px, 80%);
+      border: 1.5px solid var(--line);
+      border-radius: 14px;
+      background: var(--paper);
+      padding: 18px;
+      box-shadow: 0 12px 28px rgba(20,20,19,.08);
+    }
+    .pulse-card.run { animation: lift var(--duration, 420ms) var(--ease, cubic-bezier(.2,.8,.2,1)); }
+    @keyframes lift {
+      0% { transform: translateY(0); border-color: var(--line); }
+      50% { transform: translateY(-12px); border-color: var(--plum); box-shadow: 0 18px 38px rgba(20,20,19,.13); }
+      100% { transform: translateY(0); border-color: var(--line); }
+    }
+    .range-row { display: grid; gap: 8px; color: var(--muted); font-family: var(--mono); font-size: 12px; }
+    input[type="range"] { width: 100%; accent-color: var(--plum-dark); }
+
+    .empty { display: none; padding: 18px; color: var(--muted); border: 1.5px dashed var(--line); border-radius: 14px; background: rgba(255,255,255,.52); }
+    .footnote { margin-top: 32px; padding-top: 18px; border-top: 1.5px solid var(--line); color: var(--muted); font-size: 13px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
+      .artifact-card:hover, .artifact-card:focus-visible, .ticket:hover, .ticket:focus-visible { transform: none; }
+    }
+
+    @media (max-width: 920px) {
+      .summary-band, .map-grid, .workbench, .motion-demo { grid-template-columns: 1fr; }
+      .artifact-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .design-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .report-grid { grid-template-columns: 1fr; }
+      .board { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .col { border-right: 0; border-bottom: 1.5px solid var(--line); }
+      .col:last-child { border-bottom: 0; }
+    }
+    @media (max-width: 620px) {
+      .wrap { width: min(100% - 30px, 1160px); }
+      .masthead { padding-top: 46px; }
+      h1 { font-size: 42px; }
+      .deck { font-size: 17px; }
+      .toc-shell { position: static; }
+      .section-head { grid-template-columns: 1fr; gap: 8px; }
+      .section-title h2 { font-size: 28px; }
+      .artifact-grid, .design-grid { grid-template-columns: 1fr; }
+      .board { grid-template-columns: 1fr; }
+      .tabbar button { flex: 1 1 140px; border-bottom: 1px solid var(--line); }
+      .diff-row { grid-template-columns: 42px 18px minmax(440px, 1fr); }
+      .thumb svg { width: 142px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="masthead">
+    <div class="wrap">
+      <p class="eyebrow">Project Atlas workspace</p>
+      <h1>One artifact for the <span>whole workflow</span></h1>
+      <p class="deck">Generic Project Atlas data exercises the important artifact patterns: card galleries, wrapped chips, active states, source-style fallback, routed SVG diagrams, code tabs, diffs, design references, reports, timelines, slides, motion tuning, editors, and exports.</p>
+      <div class="meta-row">
+        <span class="pill">self-contained HTML</span>
+        <span class="pill">fallback plum theme</span>
+        <span class="pill">20 layout recipes</span>
+        <span class="pill">real state + ARIA</span>
+        <span class="pill">browser validated</span>
+      </div>
+      <div class="summary-band">
+        <article class="summary">
+          <strong>What this workspace covers</strong>
+          <p>A single offline artifact combines discovery, decision support, architecture mapping, code review, design reference, reporting, ticket triage, slide navigation, motion tuning, and export workflows.</p>
+        </article>
+        <article class="metric"><div class="label">Patterns</div><div class="num">20</div><div class="delta">catalog cards</div></article>
+        <article class="metric"><div class="label">Interactions</div><div class="num">11</div><div class="delta">click, hover, copy, filter</div></article>
+        <article class="metric warn"><div class="label">External deps</div><div class="num">0</div><div class="delta">offline-ready</div></article>
+      </div>
+    </div>
+  </header>
+
+  <div class="toc-shell">
+    <nav class="wrap toc" aria-label="Showcase sections">
+      <a href="#gallery" aria-current="true">Gallery</a>
+      <a href="#decision">Decision</a>
+      <a href="#map">Map</a>
+      <a href="#code">Code</a>
+      <a href="#design">Design</a>
+      <a href="#report">Report</a>
+      <a href="#workbench">Workbench</a>
+      <a href="#deck">Deck + Motion</a>
+    </nav>
+  </div>
+
+  <main class="wrap">
+    <section id="gallery">
+      <div class="section-head">
+        <div class="index">01 / Gallery</div>
+        <div class="section-title">
+          <h2>All 20 layout recipes</h2>
+          <p>Clickable cards demonstrate the new hover/focus affordance: lift, stronger border, tinted media band, emphasized filename, and arrow motion.</p>
+        </div>
+      </div>
+      <div class="gallery-tools">
+        <div class="chip-row" aria-label="Pattern filters">
+          <button class="chip" type="button" data-filter="all" aria-pressed="true">All</button>
+          <button class="chip" type="button" data-filter="review" aria-pressed="false">Review</button>
+          <button class="chip" type="button" data-filter="design" aria-pressed="false">Design</button>
+          <button class="chip" type="button" data-filter="diagram" aria-pressed="false">Diagram</button>
+          <button class="chip" type="button" data-filter="editor" aria-pressed="false">Editor</button>
+        </div>
+        <input class="search" type="search" data-search placeholder="Search recipes" aria-label="Search recipes">
+      </div>
+      <div class="artifact-grid" data-gallery></div>
+      <div class="empty" data-empty>No recipes match the current filter.</div>
+      <aside class="recipe-detail" id="recipe-detail" data-recipe-detail>
+        <h3>Code approaches</h3>
+        <p>Three aligned implementation options with code and tradeoffs.</p>
+        <div class="recipe-meta">
+          <div><b>Family</b><span>exploration</span></div>
+          <div><b>Recipe</b><span>01-exploration-code-approaches.html</span></div>
+          <div><b>Showcase target</b><span>#decision</span></div>
+        </div>
+      </aside>
+    </section>
+
+    <section id="decision">
+      <div class="section-head">
+        <div class="index">02 / Decision</div>
+        <div class="section-title">
+          <h2>Comparable options</h2>
+          <p>Use aligned cards when readers need to choose between approaches. The recommendation is visually obvious but the tradeoffs remain comparable.</p>
+        </div>
+      </div>
+      <div class="compare-grid">
+        <article class="option">
+          <span class="pill">fastest</span>
+          <h3>Patch in place</h3>
+          <p>Smallest change, best for urgent stabilization, weakest long-term shape.</p>
+          <div class="score">
+            <div class="score-row"><span>Speed</span><div class="bar"><i style="--w:92%"></i></div><b>92</b></div>
+            <div class="score-row"><span>Risk</span><div class="bar"><i style="--w:64%"></i></div><b>64</b></div>
+            <div class="score-row"><span>Clarity</span><div class="bar"><i style="--w:52%"></i></div><b>52</b></div>
+          </div>
+          <ul><li>Use for one-off incidents.</li><li>Keep a follow-up cleanup ticket.</li></ul>
+        </article>
+        <article class="option reco">
+          <span class="pill">recommended</span>
+          <h3>Thin adapter</h3>
+          <p>Balances speed and future flexibility by isolating the unstable edge.</p>
+          <div class="score">
+            <div class="score-row"><span>Speed</span><div class="bar"><i style="--w:78%"></i></div><b>78</b></div>
+            <div class="score-row"><span>Risk</span><div class="bar"><i style="--w:38%"></i></div><b>38</b></div>
+            <div class="score-row"><span>Clarity</span><div class="bar"><i style="--w:88%"></i></div><b>88</b></div>
+          </div>
+          <ul><li>Best default for agent handoffs.</li><li>Easy to verify with narrow tests.</li></ul>
+        </article>
+        <article class="option">
+          <span class="pill">largest</span>
+          <h3>Full rewrite</h3>
+          <p>Most coherent final state, but too much blast radius for this slice.</p>
+          <div class="score">
+            <div class="score-row"><span>Speed</span><div class="bar"><i style="--w:34%"></i></div><b>34</b></div>
+            <div class="score-row"><span>Risk</span><div class="bar"><i style="--w:82%"></i></div><b>82</b></div>
+            <div class="score-row"><span>Clarity</span><div class="bar"><i style="--w:94%"></i></div><b>94</b></div>
+          </div>
+          <ul><li>Reserve for planned migrations.</li><li>Needs separate rollout plan.</li></ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="map">
+      <div class="section-head">
+        <div class="index">03 / Map</div>
+        <div class="section-title">
+          <h2>Routed system map</h2>
+          <p>A lane-based SVG diagram keeps arrows readable. Nodes are clickable and update the detail panel with real selected state.</p>
+        </div>
+      </div>
+      <div class="map-grid">
+        <div class="diagram-panel">
+          <svg viewBox="0 0 920 430" role="img" aria-labelledby="map-title map-desc">
+            <title id="map-title">Project Atlas request path</title>
+            <desc id="map-desc">A non-crossing map of intake, planning, runtime, and output stages.</desc>
+            <defs>
+              <marker id="arrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="currentColor"></path></marker>
+            </defs>
+            <rect class="lane" x="24" y="42" width="872" height="88" rx="14"></rect>
+            <rect class="lane" x="24" y="176" width="872" height="88" rx="14"></rect>
+            <rect class="lane" x="24" y="310" width="872" height="88" rx="14"></rect>
+            <text class="lane-label" x="44" y="76">Intake</text>
+            <text class="lane-label" x="44" y="210">Planning</text>
+            <text class="lane-label" x="44" y="344">Output</text>
+
+            <g class="node is-active" tabindex="0" data-node="brief" transform="translate(148 58)">
+              <rect width="170" height="56" rx="12"></rect><text x="18" y="24">Brief</text><text class="sub" x="18" y="43">goals + evidence</text>
+            </g>
+            <g class="node" tabindex="0" data-node="sources" transform="translate(382 58)">
+              <rect width="170" height="56" rx="12"></rect><text x="18" y="24">Sources</text><text class="sub" x="18" y="43">repo, docs, notes</text>
+            </g>
+            <g class="node" tabindex="0" data-node="style" transform="translate(616 58)">
+              <rect width="170" height="56" rx="12"></rect><text x="18" y="24">Style</text><text class="sub" x="18" y="43">tokens or fallback</text>
+            </g>
+            <g class="node" tabindex="0" data-node="shape" transform="translate(148 192)">
+              <rect width="170" height="56" rx="12"></rect><text x="18" y="24">Shape</text><text class="sub" x="18" y="43">gallery, map, editor</text>
+            </g>
+            <g class="node" tabindex="0" data-node="compose" transform="translate(382 192)">
+              <rect width="170" height="56" rx="12"></rect><text x="18" y="24">Compose</text><text class="sub" x="18" y="43">HTML + CSS + JS</text>
+            </g>
+            <g class="node" tabindex="0" data-node="validate" transform="translate(616 192)">
+              <rect width="170" height="56" rx="12"></rect><text x="18" y="24">Validate</text><text class="sub" x="18" y="43">browser + mobile</text>
+            </g>
+            <g class="node" tabindex="0" data-node="deliver" transform="translate(382 326)">
+              <rect width="170" height="56" rx="12"></rect><text x="18" y="24">Deliver</text><text class="sub" x="18" y="43">standalone file</text>
+            </g>
+
+            <path class="edge" marker-end="url(#arrow)" d="M318 86 H378"></path>
+            <path class="edge" marker-end="url(#arrow)" d="M552 86 H612"></path>
+            <path class="edge main" marker-end="url(#arrow)" d="M701 114 V148 H233 V188"></path>
+            <path class="edge" marker-end="url(#arrow)" d="M318 220 H378"></path>
+            <path class="edge" marker-end="url(#arrow)" d="M552 220 H612"></path>
+            <path class="edge main" marker-end="url(#arrow)" d="M701 248 V286 H467 V322"></path>
+          </svg>
+        </div>
+        <aside class="detail-card" data-node-detail>
+          <h3>Brief</h3>
+          <p>Capture the task shape, intended reader, evidence sources, and output constraints before choosing layout.</p>
+          <div class="tags"><span class="pill">source excerpts</span><span class="pill">assumptions</span><span class="pill">auditable</span></div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="code">
+      <div class="section-head">
+        <div class="index">04 / Code</div>
+        <div class="section-title">
+          <h2>Code examples and review blocks</h2>
+          <p>Code gets designed containers: tabs for variants, headers for context, copy buttons for reuse, and dark diff blocks for review.</p>
+        </div>
+      </div>
+      <div class="code-tabs" data-code-tabs>
+        <div class="tabbar" role="tablist" aria-label="Code examples">
+          <button type="button" role="tab" aria-selected="true" aria-controls="panel-html" data-tab="html">artifact.html</button>
+          <button type="button" role="tab" aria-selected="false" aria-controls="panel-css" data-tab="css">card.css</button>
+          <button type="button" role="tab" aria-selected="false" aria-controls="panel-js" data-tab="js">state.js</button>
+        </div>
+        <div class="code-head"><span class="file-label" data-current-file>artifact.html</span><button class="copy-btn" type="button" data-copy-current>Copy active code</button></div>
+        <pre class="code-panel is-active" id="panel-html" role="tabpanel" data-panel="html"><code>&lt;article class="artifact-card" href="#map"&gt;
+  &lt;div class="thumb"&gt;...inline SVG...&lt;/div&gt;
+  &lt;div class="artifact-body"&gt;
+    &lt;h3&gt;Routed module map&lt;/h3&gt;
+    &lt;p&gt;Lane-based SVG with clickable nodes and a detail panel.&lt;/p&gt;
+    &lt;div class="file-row"&gt;04-code-understanding.html &lt;span class="arrow"&gt;-&gt;&lt;/span&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/article&gt;</code></pre>
+        <pre class="code-panel" id="panel-css" role="tabpanel" data-panel="css"><code>.artifact-card {
+  transition: transform 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+}
+.artifact-card:hover,
+.artifact-card:focus-visible {
+  <span class="mark">transform: translateY(-3px);</span>
+  border-color: var(--slate);
+  box-shadow: 0 14px 34px rgba(20,20,19,.12);
+}
+.artifact-card:hover .thumb { background: var(--oat); }
+.artifact-card:hover .arrow { transform: translateX(3px); }</code></pre>
+        <pre class="code-panel" id="panel-js" role="tabpanel" data-panel="js"><code>document.addEventListener("click", (event) =&gt; {
+  const tab = event.target.closest("[data-tab]");
+  if (!tab) return;
+
+  const group = tab.closest("[data-code-tabs]");
+  group.querySelectorAll("[data-tab]").forEach((button) =&gt; {
+    button.setAttribute("aria-selected", String(button === tab));
+  });
+  group.querySelectorAll("[data-panel]").forEach((panel) =&gt; {
+    panel.classList.toggle("is-active", panel.dataset.panel === tab.dataset.tab);
+  });
+});</code></pre>
+      </div>
+      <details>
+        <summary>Why code examples are first-class UI</summary>
+        <div class="detail-body">Tabs make alternatives comparable. File labels preserve context. Copy buttons make the artifact useful after reading. Diff rows keep review comments near the exact lines they discuss.</div>
+      </details>
+      <article class="diff-card" style="margin-top:16px">
+        <div class="diff-head"><span class="file-label">src/renderArtifact.ts</span><button class="copy-btn" type="button" data-copy-target="diff-block">Copy diff</button></div>
+        <pre class="diff" id="diff-block"><code><span class="diff-row del"><span class="ln">41</span><span class="sign">-</span><span>return markdownSummary(data);</span></span>
+<span class="diff-row add"><span class="ln">41</span><span class="sign">+</span><span>return htmlArtifact({ data, layout: chooseLayout(data.shape) });</span></span>
+<span class="diff-row focus"><span class="ln">42</span><span class="sign">+</span><span>validateResponsiveControls(document);</span></span>
+<span class="diff-row add"><span class="ln">43</span><span class="sign">+</span><span>assertSelectedStateIsReal(document);</span></span></code></pre>
+      </article>
+    </section>
+
+    <section id="design">
+      <div class="section-head">
+        <div class="index">05 / Design</div>
+        <div class="section-title">
+          <h2>Design reference and variants</h2>
+          <p>When an artifact becomes reusable, render tokens and components as inspectable UI instead of describing them in prose.</p>
+        </div>
+      </div>
+      <div class="design-grid">
+        <div class="swatch"><i style="--tone:var(--ivory)"></i><b>--ivory</b><span>#FAF9F5</span></div>
+        <div class="swatch"><i style="--tone:var(--paper)"></i><b>--paper</b><span>#FFFFFF</span></div>
+        <div class="swatch"><i style="--tone:var(--plum)"></i><b>--plum</b><span>#A678D6</span></div>
+        <div class="swatch"><i style="--tone:var(--olive)"></i><b>--olive</b><span>#788C5D</span></div>
+        <div class="component"><h3>Primary</h3><button class="demo-button">Run check</button></div>
+        <div class="component"><h3>Secondary</h3><button class="demo-button secondary">Save draft</button></div>
+        <div class="component"><h3>Disabled</h3><button class="demo-button" disabled>Unavailable</button></div>
+        <div class="component"><h3>Input</h3><input class="field" value="LongValueWrapsWithoutExpandingTheViewport"></div>
+      </div>
+    </section>
+
+    <section id="report">
+      <div class="section-head">
+        <div class="index">06 / Report</div>
+        <div class="section-title">
+          <h2>Status and timeline</h2>
+          <p>Reports need summary, metrics, trend, risk, and timestamped sequence. The structure should be scannable before it is exhaustive.</p>
+        </div>
+      </div>
+      <div class="report-grid">
+        <div class="chart panel">
+          <div class="metric" style="box-shadow:none;border:0;padding:0 0 14px"><div class="label">Generic quality score</div><div class="num">87</div><div class="delta">+9 from baseline review</div></div>
+          <svg viewBox="0 0 520 180" role="img" aria-label="Trend chart">
+            <line x1="20" y1="148" x2="500" y2="148" stroke="#D8D4C8"></line>
+            <line x1="20" y1="100" x2="500" y2="100" stroke="#E8E3D8"></line>
+            <line x1="20" y1="52" x2="500" y2="52" stroke="#E8E3D8"></line>
+            <polyline points="24,132 104,122 184,114 264,82 344,76 424,54 496,44" fill="none" stroke="#7B55B6" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></polyline>
+            <circle cx="496" cy="44" r="6" fill="#A678D6"></circle>
+          </svg>
+        </div>
+        <div class="timeline">
+          <div class="tl-entry"><div class="tl-time">09:00</div><p><b>Brief loaded.</b> Agent identified a comparison, diagram, and editor-shaped deliverable.</p></div>
+          <div class="tl-entry"><div class="tl-time">09:18</div><p><b>Style pass.</b> No product style found, so fallback theme tokens were applied.</p></div>
+          <div class="tl-entry"><div class="tl-time">09:41</div><p><b>Validation.</b> Browser checks covered mobile width, selected state, and copy/export controls.</p></div>
+          <div class="tl-entry"><div class="tl-time">10:05</div><p><b>Ready.</b> Artifact can be shared as a single offline HTML file.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="workbench">
+      <div class="section-head">
+        <div class="index">07 / Editor</div>
+        <div class="section-title">
+          <h2>Workbench with export</h2>
+          <p>Editor artifacts should tighten the human-agent loop: manipulate state, then copy Markdown, JSON, CSS, or a prompt back into the workflow.</p>
+        </div>
+      </div>
+      <div class="workbench">
+        <div class="board-toolbar">
+          <div class="board-summary" data-board-summary></div>
+          <div class="toolbar">
+            <button class="small-btn" type="button" data-reset>Reset</button>
+            <button class="small-btn" type="button" data-export>Copy Markdown</button>
+          </div>
+        </div>
+        <div class="board" data-board></div>
+        <aside class="editor-panel panel">
+          <h3>State editor</h3>
+          <p style="color:var(--muted)">Drag tickets between lanes, or click one and use the fallback move buttons. Toggle flags and edit the prompt; export keeps everything in sync.</p>
+          <div class="toolbar" style="margin:12px 0">
+            <button class="small-btn" type="button" data-move="now">Move Now</button>
+            <button class="small-btn" type="button" data-move="next">Move Next</button>
+            <button class="small-btn" type="button" data-move="later">Move Later</button>
+            <button class="small-btn" type="button" data-move="cut">Cut</button>
+          </div>
+          <div class="flag"><code>smartRouting</code><button class="toggle" type="button" aria-pressed="true" data-toggle><i></i></button></div>
+          <div class="flag"><code>strictValidation</code><button class="toggle" type="button" aria-pressed="true" data-toggle><i></i></button></div>
+          <label class="file-label" for="prompt">Prompt template</label>
+          <textarea id="prompt" data-prompt>Summarize {{topic}} for {{audience}}. Include risks, examples, and a recommended next step.</textarea>
+          <div class="toolbar" style="margin-top:12px">
+            <button class="small-btn" type="button" data-export>Copy Markdown</button>
+            <button class="small-btn" type="button" data-reset>Reset</button>
+          </div>
+          <div class="export-box" data-export-box></div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="deck">
+      <div class="section-head">
+        <div class="index">08 / Deck</div>
+        <div class="section-title">
+          <h2>Mini deck and motion sandbox</h2>
+          <p>Decks use discrete slides. Motion prototypes expose timing/easing controls and export the chosen CSS.</p>
+        </div>
+      </div>
+      <div class="slide-shell">
+        <div class="slide-controls">
+          <div class="slide-nav">
+            <button class="small-btn" type="button" data-slide-step="-1" aria-label="Previous slide">&larr;</button>
+            <div class="toolbar" role="tablist" aria-label="Slides">
+              <button class="seg-btn" type="button" data-slide="0" aria-selected="true">Slide 1</button>
+              <button class="seg-btn" type="button" data-slide="1" aria-selected="false">Slide 2</button>
+              <button class="seg-btn" type="button" data-slide="2" aria-selected="false">Slide 3</button>
+            </div>
+            <button class="small-btn" type="button" data-slide-step="1" aria-label="Next slide">&rarr;</button>
+          </div>
+          <span class="file-label" data-slide-count>1 / 3</span>
+        </div>
+        <div class="slide-track">
+          <article class="slide is-active"><h3>HTML is the medium</h3><p>When the result needs structure, interaction, or visual inspection, a one-file HTML artifact is more useful than Markdown.</p></article>
+          <article class="slide"><h3>State must be real</h3><p>Tabs, chips, nav, filters, and selected cards update visual state and ARIA state together.</p></article>
+          <article class="slide"><h3>Validate in a browser</h3><p>Check rendered DOM, mobile width, screenshots, hover/focus affordances, and export behavior before delivery.</p></article>
+        </div>
+      </div>
+      <div class="motion-demo">
+        <div class="motion-stage"><div class="pulse-card" data-pulse><b>Completion card</b><p style="margin:8px 0 0;color:var(--muted)">Replay this lift to tune duration.</p></div></div>
+        <div class="panel editor-panel">
+          <h3>Motion tokens</h3>
+          <label class="range-row">Duration <span data-duration-label>420ms</span><input type="range" min="180" max="900" value="420" data-duration></label>
+          <div class="toolbar" style="margin-top:14px">
+            <button class="small-btn" type="button" data-replay>Replay</button>
+            <button class="small-btn" type="button" data-copy-motion>Copy CSS</button>
+          </div>
+          <div class="export-box" data-motion-css>--duration: 420ms;
+--ease: cubic-bezier(.2,.8,.2,1);</div>
+        </div>
+      </div>
+      <p class="footnote">Self-contained offline HTML. Controls, previews, exports, and navigation run entirely in the page.</p>
+    </section>
+  </main>
+
+  <script>
+    const patterns = [
+      ["exploration", "Code approaches", "Three aligned implementation options with code and tradeoffs.", "01-exploration-code-approaches.html"],
+      ["design", "Visual directions", "Four distinct UI directions with rationale and live controls.", "02-exploration-visual-designs.html"],
+      ["review", "Annotated PR", "Risk map, file cards, dark diffs, and margin comments.", "03-code-review-pr.html"],
+      ["diagram", "Module map", "Hot path, entry points, and clickable architecture nodes.", "04-code-understanding.html"],
+      ["design", "Design system", "Tokens, type, spacing, components, and copyable values.", "05-design-system.html"],
+      ["design", "Variant matrix", "States, sizes, intents, and edge cases in a grid.", "06-component-variants.html"],
+      ["prototype", "Animation sandbox", "Timing controls, replay, timeline, and generated CSS.", "07-prototype-animation.html"],
+      ["prototype", "Interaction prototype", "Clickable or draggable UI with visible state.", "08-prototype-interaction.html"],
+      ["deck", "Slide deck", "Keyboard-friendly slides with progress state.", "09-slide-deck.html"],
+      ["diagram", "SVG figure sheet", "Reusable inline diagrams with captions and copy buttons.", "10-svg-illustrations.html"],
+      ["report", "Status report", "Metrics, trends, shipped work, risks, and carryover.", "11-status-report.html"],
+      ["report", "Incident timeline", "Severity, impact, exact times, root cause, and actions.", "12-incident-report.html"],
+      ["diagram", "Annotated flowchart", "Branching process with selected-node detail.", "13-flowchart-diagram.html"],
+      ["research", "Feature explainer", "TL;DR, files, tabs, collapsibles, and FAQ.", "14-research-feature-explainer.html"],
+      ["research", "Concept explainer", "Interactive model, controls, table, and glossary.", "15-research-concept-explainer.html"],
+      ["plan", "Implementation plan", "Milestones, data flow, mockups, risks, and tests.", "16-implementation-plan.html"],
+      ["review", "PR writeup", "Author-side review map with before/after and rollout.", "17-pr-writeup.html"],
+      ["editor", "Triage board", "Move tickets across lanes and export Markdown.", "18-editor-triage-board.html"],
+      ["editor", "Flag editor", "Toggle config, detect warnings, export diff.", "19-editor-feature-flags.html"],
+      ["editor", "Prompt tuner", "Edit template, preview outputs, and copy final prompt.", "20-editor-prompt-tuner.html"]
+    ];
+
+    const nodeDetails = {
+      brief: ["Brief", "Capture the task shape, intended reader, evidence sources, and output constraints before choosing layout.", ["source excerpts", "assumptions", "auditable"]],
+      sources: ["Sources", "Read the repository, docs, notes, or source material that should constrain the output.", ["grounded", "local first", "specific"]],
+      style: ["Style", "Use source styling when it exists. Otherwise apply the fallback editorial theme with plum active states.", ["tokens", "hover", "cards"]],
+      shape: ["Shape", "Choose the artifact family: comparison, map, explainer, report, deck, or editor.", ["layout", "purpose", "reader"]],
+      compose: ["Compose", "Write one self-contained HTML file with inline CSS, inline JS, accessible controls, and export paths.", ["offline", "semantic", "stateful"]],
+      validate: ["Validate", "Use browser checks for render output, interactions, selected state, hover/focus, and mobile overflow.", ["screenshots", "390px", "no scroll strips"]],
+      deliver: ["Deliver", "Return the file path and concise validation evidence. The HTML page carries the details.", ["shareable", "single file", "done"]]
+    };
+
+    const lanes = [
+      { id: "now", label: "Now" },
+      { id: "next", label: "Next" },
+      { id: "later", label: "Later" },
+      { id: "cut", label: "Cut" }
+    ];
+    const estimatePoints = { S: 1, M: 2, L: 3 };
+    const ownerClass = { AK: "o1", JM: "o2", RS: "o3", TN: "o4", EL: "o1" };
+    const initialTickets = [
+      { id: "AT-238", title: "Cards need real destinations", lane: "now", tag: "bug", size: "L", owner: "JM" },
+      { id: "AT-252", title: "Diagram overflows its panel", lane: "now", tag: "bug", size: "M", owner: "RS" },
+      { id: "AT-219", title: "Fix label chip spacing", lane: "now", tag: "debt", size: "L", owner: "AK" },
+      { id: "AT-244", title: "Compact token swatches beside names", lane: "next", tag: "feat", size: "M", owner: "EL" },
+      { id: "AT-231", title: "Kanban ticket drag and drop", lane: "next", tag: "feat", size: "S", owner: "TN" },
+      { id: "AT-247", title: "Add owner and size metadata", lane: "next", tag: "feat", size: "M", owner: "JM" },
+      { id: "AT-213", title: "Dark mode pass for fallback theme", lane: "later", tag: "chore", size: "M", owner: "EL" },
+      { id: "AT-258", title: "Bundle artifact gallery export", lane: "later", tag: "feat", size: "M", owner: "RS" },
+      { id: "AT-221", title: "Replace placeholder data generator", lane: "later", tag: "debt", size: "L", owner: "TN" },
+      { id: "AT-198", title: "Animated confetti on export", lane: "cut", tag: "feat", size: "M", owner: "AK" },
+      { id: "AT-204", title: "Native desktop wrapper prototype", lane: "cut", tag: "feat", size: "L", owner: "TN" }
+    ];
+    let tickets = structuredClone(initialTickets);
+    let selectedTicket = tickets[0].id;
+    let selectedRecipe = 0;
+    let currentSlide = 0;
+    let dragTicketId = null;
+
+    const $ = (sel, root = document) => root.querySelector(sel);
+    const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+
+    function iconSvg(kind) {
+      const shapes = {
+        review: '<rect class="paper" x="30" y="18" width="70" height="52" rx="8"/><path class="ink" d="M42 34h44M42 48h34"/><circle class="accent" cx="120" cy="38" r="9"/><path class="ink" d="M116 58h34"/>',
+        design: '<rect class="paper" x="26" y="20" width="46" height="46" rx="10"/><rect class="paper" x="86" y="20" width="46" height="46" rx="10"/><circle class="accent" cx="50" cy="86" r="10"/><circle class="soft" cx="106" cy="86" r="10"/>',
+        diagram: '<rect class="paper" x="18" y="24" width="48" height="34" rx="8"/><rect class="paper" x="112" y="24" width="48" height="34" rx="8"/><rect class="paper" x="64" y="74" width="48" height="34" rx="8"/><path class="ink" d="M66 42h44M90 58v16"/>',
+        editor: '<rect class="paper" x="26" y="18" width="118" height="74" rx="10"/><path class="ink" d="M44 38h82M44 56h44M44 74h64"/><circle class="accent" cx="132" cy="74" r="8"/>',
+        report: '<path class="ink" d="M26 88h124M42 72V42M78 72V28M114 72V52"/><circle class="accent" cx="114" cy="52" r="8"/>',
+        prototype: '<rect class="paper" x="28" y="28" width="72" height="48" rx="12"/><path class="ink" d="M44 52h40"/><circle class="accent" cx="124" cy="52" r="14"/>',
+        deck: '<rect class="paper" x="26" y="22" width="124" height="70" rx="12"/><path class="ink" d="M44 44h58M44 62h82"/><rect class="soft" x="114" y="72" width="20" height="6" rx="3"/>',
+        research: '<circle class="paper" cx="70" cy="52" r="30"/><path class="ink" d="M92 74l36 28M58 52h24M70 40v24"/><circle class="accent" cx="118" cy="40" r="8"/>',
+        plan: '<rect class="paper" x="30" y="24" width="112" height="70" rx="10"/><path class="ink" d="M48 44h70M48 60h44M48 76h62"/><circle class="accent" cx="132" cy="44" r="6"/>',
+        exploration: '<rect class="paper" x="22" y="24" width="40" height="50" rx="8"/><rect class="paper" x="72" y="18" width="40" height="62" rx="8"/><rect class="paper" x="122" y="30" width="40" height="44" rx="8"/><path class="ink" d="M34 46h16M84 46h16M134 46h16"/>'
+      };
+      return `<svg viewBox="0 0 180 116" aria-hidden="true">${shapes[kind] || shapes.exploration}</svg>`;
+    }
+
+    function renderGallery() {
+      const filter = $('.chip[aria-pressed="true"][data-filter]')?.dataset.filter || "all";
+      const q = ($('[data-search]').value || "").trim().toLowerCase();
+      const items = patterns.filter(([kind, title, desc, file]) => {
+        const categoryMatch = filter === "all" || kind === filter;
+        const queryMatch = !q || `${kind} ${title} ${desc} ${file}`.toLowerCase().includes(q);
+        return categoryMatch && queryMatch;
+      });
+      $('[data-gallery]').innerHTML = items.map(([kind, title, desc, file]) => {
+        const originalIndex = patterns.findIndex((pattern) => pattern[3] === file);
+        const selected = originalIndex === selectedRecipe;
+        return `
+        <a class="artifact-card ${selected ? "is-selected" : ""}" href="#recipe-detail" data-recipe="${originalIndex}" aria-current="${selected ? "true" : "false"}">
+          <div class="thumb">${iconSvg(kind)}</div>
+          <div class="artifact-body">
+            <h3>${title}</h3>
+            <p>${desc}</p>
+            <div class="file-row"><span>${file}</span><span class="arrow">-&gt;</span></div>
+          </div>
+        </a>
+      `;
+      }).join("");
+      $('[data-empty]').style.display = items.length ? "none" : "block";
+    }
+
+    function recipeTarget(kind) {
+      if (kind === "editor") return "#workbench";
+      if (kind === "diagram") return "#map";
+      if (kind === "design") return "#design";
+      if (kind === "report") return "#report";
+      if (kind === "review") return "#code";
+      if (kind === "deck" || kind === "prototype") return "#deck";
+      return "#decision";
+    }
+
+    function renderRecipeDetail(index) {
+      const [kind, title, desc, file] = patterns[index] || patterns[0];
+      const target = recipeTarget(kind);
+      $('[data-recipe-detail]').innerHTML = `
+        <h3>${title}</h3>
+        <p>${desc}</p>
+        <div class="recipe-meta">
+          <div><b>Family</b><span>${kind}</span></div>
+          <div><b>Recipe</b><span>${file}</span></div>
+          <div><b>Showcase target</b><span>${target}</span></div>
+        </div>
+        <div class="toolbar" style="margin-top:14px">
+          <a class="small-btn" href="${target}">Jump to matching section</a>
+          <button class="small-btn" type="button" data-copy-recipe="${index}">Copy recipe handle</button>
+        </div>
+      `;
+    }
+
+    function textFromElement(element) {
+      return element ? element.innerText.replace(/\n{3,}/g, "\n\n").trim() : "";
+    }
+
+    async function copyText(text, button) {
+      if (!text) return;
+      const original = button.textContent;
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (_error) {
+        const area = document.createElement("textarea");
+        area.value = text;
+        area.setAttribute("readonly", "");
+        area.style.position = "fixed";
+        area.style.opacity = "0";
+        document.body.appendChild(area);
+        area.select();
+        document.execCommand("copy");
+        area.remove();
+      }
+      button.textContent = "Copied";
+      setTimeout(() => { button.textContent = original; }, 1000);
+    }
+
+    function updateCurrentNav(hash = location.hash || "#gallery") {
+      $$(".toc a").forEach((link) => {
+        if (link.getAttribute("href") === hash) link.setAttribute("aria-current", "true");
+        else link.removeAttribute("aria-current");
+      });
+    }
+
+    function renderNodeDetail(id) {
+      const detail = nodeDetails[id] || nodeDetails.brief;
+      $('[data-node-detail]').innerHTML = `<h3>${detail[0]}</h3><p>${detail[1]}</p><div class="tags">${detail[2].map((tag) => `<span class="pill">${tag}</span>`).join("")}</div>`;
+      $$(".node").forEach((node) => node.classList.toggle("is-active", node.dataset.node === id));
+    }
+
+    function renderBoard() {
+      $('[data-board-summary]').innerHTML = lanes.map((lane) => `<b>${tickets.filter((t) => t.lane === lane.id).length}</b> ${lane.id}`).join(" · ");
+      $('[data-board]').innerHTML = lanes.map((lane) => {
+        const laneTickets = tickets.filter((ticket) => ticket.lane === lane.id);
+        const points = laneTickets.reduce((sum, ticket) => sum + estimatePoints[ticket.size], 0);
+        return `
+        <section class="col" data-col="${lane.id}">
+          <div class="col-head"><h3>${lane.label}</h3><span class="count-badge">${laneTickets.length}</span></div>
+          <div class="col-body" data-lane="${lane.id}">
+            ${laneTickets.map((ticket) => `
+              <button class="ticket ${ticket.id === selectedTicket ? "is-selected" : ""}" type="button" draggable="true" data-ticket="${ticket.id}">
+                <span class="ticket-top">
+                  <span class="tid">${ticket.id}</span>
+                  <span class="ticket-tag ${ticket.tag}">${ticket.tag}</span>
+                  <span class="ticket-size">${ticket.size}</span>
+                </span>
+                <span class="ticket-title">${ticket.title}</span>
+                <span class="ticket-bottom"><span class="owner ${ownerClass[ticket.owner] || "o1"}">${ticket.owner}</span><span>${estimatePoints[ticket.size]} pts</span></span>
+              </button>
+            `).join("")}
+          </div>
+          <div class="col-foot"><span>estimate</span><b>${points} pts</b></div>
+        </section>
+      `;
+      }).join("");
+      updateExportBox();
+    }
+
+    function exportMarkdown() {
+      const flags = $$("[data-toggle]").map((button) => `${button.closest(".flag").querySelector("code").textContent}: ${button.getAttribute("aria-pressed")}`).join("\n");
+      const board = lanes.map((lane) => `### ${lane.id}\n${tickets.filter((t) => t.lane === lane.id).map((t) => `- ${t.id}: ${t.title} (${t.tag}, ${t.size}, ${t.owner}, ${estimatePoints[t.size]} pts)`).join("\n") || "- none"}`).join("\n\n");
+      return `# Project Atlas Export\n\n${board}\n\n## Flags\n${flags}\n\n## Prompt\n${$("[data-prompt]").value}`;
+    }
+
+    function updateExportBox() {
+      $('[data-export-box]').textContent = exportMarkdown();
+    }
+
+    function showSlide(index) {
+      const slides = $$(".slide");
+      currentSlide = (index + slides.length) % slides.length;
+      slides.forEach((slide, i) => slide.classList.toggle("is-active", i === currentSlide));
+      $$("[data-slide]").forEach((button, i) => button.setAttribute("aria-selected", String(i === currentSlide)));
+      $('[data-slide-count]').textContent = `${currentSlide + 1} / ${slides.length}`;
+    }
+
+    function updateMotion() {
+      const duration = $('[data-duration]').value;
+      $('[data-duration-label]').textContent = `${duration}ms`;
+      const css = `--duration: ${duration}ms;\n--ease: cubic-bezier(.2,.8,.2,1);`;
+      $('[data-motion-css]').textContent = css;
+      $('[data-pulse]').style.setProperty("--duration", `${duration}ms`);
+    }
+
+    document.addEventListener("click", (event) => {
+      const nav = event.target.closest(".toc a");
+      if (nav) {
+        updateCurrentNav(nav.getAttribute("href"));
+        return;
+      }
+
+      const chip = event.target.closest("[data-filter]");
+      if (chip) {
+        $$("[data-filter]").forEach((button) => button.setAttribute("aria-pressed", String(button === chip)));
+        renderGallery();
+        return;
+      }
+
+      const recipeCard = event.target.closest("[data-recipe]");
+      if (recipeCard) {
+        event.preventDefault();
+        selectedRecipe = Number(recipeCard.dataset.recipe);
+        renderRecipeDetail(selectedRecipe);
+        renderGallery();
+        history.pushState(null, "", "#recipe-detail");
+        document.getElementById("recipe-detail").scrollIntoView({ block: "nearest" });
+        return;
+      }
+
+      const node = event.target.closest(".node");
+      if (node) {
+        renderNodeDetail(node.dataset.node);
+        return;
+      }
+
+      const tab = event.target.closest("[data-tab]");
+      if (tab) {
+        const group = tab.closest("[data-code-tabs]");
+        group.querySelectorAll("[data-tab]").forEach((button) => button.setAttribute("aria-selected", String(button === tab)));
+        group.querySelectorAll("[data-panel]").forEach((panel) => panel.classList.toggle("is-active", panel.dataset.panel === tab.dataset.tab));
+        $('[data-current-file]', group).textContent = tab.textContent.trim();
+        return;
+      }
+
+      const activeCopy = event.target.closest("[data-copy-current]");
+      if (activeCopy) {
+        const group = activeCopy.closest("[data-code-tabs]");
+        copyText(textFromElement($(".code-panel.is-active", group)), activeCopy);
+        return;
+      }
+
+      const targetCopy = event.target.closest("[data-copy-target]");
+      if (targetCopy) {
+        copyText(textFromElement(document.getElementById(targetCopy.dataset.copyTarget)), targetCopy);
+        return;
+      }
+
+      const recipeCopy = event.target.closest("[data-copy-recipe]");
+      if (recipeCopy) {
+        const recipe = patterns[Number(recipeCopy.dataset.copyRecipe)];
+        copyText(`${recipe[3]} (${recipe[0]}): ${recipe[1]}`, recipeCopy);
+        return;
+      }
+
+      const ticket = event.target.closest("[data-ticket]");
+      if (ticket) {
+        selectedTicket = ticket.dataset.ticket;
+        renderBoard();
+        return;
+      }
+
+      const move = event.target.closest("[data-move]");
+      if (move) {
+        const item = tickets.find((ticketItem) => ticketItem.id === selectedTicket);
+        if (item) item.lane = move.dataset.move;
+        renderBoard();
+        return;
+      }
+
+      const toggle = event.target.closest("[data-toggle]");
+      if (toggle) {
+        toggle.setAttribute("aria-pressed", String(toggle.getAttribute("aria-pressed") !== "true"));
+        updateExportBox();
+        return;
+      }
+
+      const exportButton = event.target.closest("[data-export]");
+      if (exportButton) {
+        copyText(exportMarkdown(), exportButton);
+        return;
+      }
+
+      const reset = event.target.closest("[data-reset]");
+      if (reset) {
+        tickets = structuredClone(initialTickets);
+        selectedTicket = tickets[0].id;
+        $$("[data-toggle]").forEach((button) => button.setAttribute("aria-pressed", "true"));
+        $('[data-prompt]').value = "Summarize {{topic}} for {{audience}}. Include risks, examples, and a recommended next step.";
+        renderBoard();
+        return;
+      }
+
+      const slideButton = event.target.closest("[data-slide]");
+      if (slideButton) {
+        showSlide(Number(slideButton.dataset.slide));
+        return;
+      }
+
+      const slideStep = event.target.closest("[data-slide-step]");
+      if (slideStep) {
+        showSlide(currentSlide + Number(slideStep.dataset.slideStep));
+        return;
+      }
+
+      const replay = event.target.closest("[data-replay]");
+      if (replay) {
+        const card = $('[data-pulse]');
+        card.classList.remove("run");
+        void card.offsetWidth;
+        card.classList.add("run");
+        return;
+      }
+
+      const copyMotion = event.target.closest("[data-copy-motion]");
+      if (copyMotion) {
+        copyText($('[data-motion-css]').textContent, copyMotion);
+      }
+    });
+
+    document.addEventListener("dragstart", (event) => {
+      const ticket = event.target.closest("[data-ticket]");
+      if (!ticket) return;
+      dragTicketId = ticket.dataset.ticket;
+      selectedTicket = dragTicketId;
+      ticket.classList.add("dragging");
+      event.dataTransfer.effectAllowed = "move";
+      event.dataTransfer.setData("text/plain", dragTicketId);
+    });
+
+    document.addEventListener("dragover", (event) => {
+      const lane = event.target.closest("[data-lane]");
+      if (!lane || !dragTicketId) return;
+      event.preventDefault();
+      lane.closest(".col").classList.add("dragover");
+      event.dataTransfer.dropEffect = "move";
+    });
+
+    document.addEventListener("dragleave", (event) => {
+      const col = event.target.closest(".col");
+      if (col && !col.contains(event.relatedTarget)) col.classList.remove("dragover");
+    });
+
+    document.addEventListener("drop", (event) => {
+      const lane = event.target.closest("[data-lane]");
+      if (!lane || !dragTicketId) return;
+      event.preventDefault();
+      const ticket = tickets.find((item) => item.id === dragTicketId);
+      if (ticket) {
+        ticket.lane = lane.dataset.lane;
+        selectedTicket = ticket.id;
+      }
+      dragTicketId = null;
+      $$(".col").forEach((col) => col.classList.remove("dragover"));
+      renderBoard();
+    });
+
+    document.addEventListener("dragend", () => {
+      dragTicketId = null;
+      $$(".ticket").forEach((ticket) => ticket.classList.remove("dragging"));
+      $$(".col").forEach((col) => col.classList.remove("dragover"));
+    });
+
+    document.addEventListener("keydown", (event) => {
+      const isTyping = event.target.closest("input, textarea, select, [contenteditable='true']");
+      if (!isTyping && (event.key === "ArrowLeft" || event.key === "ArrowRight")) {
+        event.preventDefault();
+        showSlide(currentSlide + (event.key === "ArrowRight" ? 1 : -1));
+        return;
+      }
+
+      const node = event.target.closest(".node");
+      if (node && (event.key === "Enter" || event.key === " ")) {
+        event.preventDefault();
+        renderNodeDetail(node.dataset.node);
+      }
+    });
+
+    $('[data-search]').addEventListener("input", renderGallery);
+    $('[data-prompt]').addEventListener("input", updateExportBox);
+    $('[data-duration]').addEventListener("input", updateMotion);
+    window.addEventListener("hashchange", () => updateCurrentNav());
+
+    renderGallery();
+    renderRecipeDetail(selectedRecipe);
+    renderBoard();
+    updateMotion();
+    updateCurrentNav();
+  </script>
+</body>
+</html>
